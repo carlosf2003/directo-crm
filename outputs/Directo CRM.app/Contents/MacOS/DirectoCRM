@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+CRM_FILE="${APP_DIR}/Resources/crm-marketplaces.html"
+
+open "${CRM_FILE}"
