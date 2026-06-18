@@ -33,6 +33,8 @@ Para mover datos o hacer copia de seguridad:
 
 La `X` del listado solo limpia filtros; no borra clientes.
 
+El importador acepta CSV separado por comas o por punto y coma, y salta filas vacías antes de los encabezados.
+
 ## Canales incluidos
 
 - Amazon
