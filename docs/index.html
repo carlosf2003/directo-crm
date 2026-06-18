@@ -1,0 +1,1703 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Directo CRM</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f6f4;
+      --panel: #ffffff;
+      --panel-2: #f0f5f1;
+      --text: #17211b;
+      --muted: #65706a;
+      --line: #dbe1dc;
+      --line-strong: #c5cdc7;
+      --accent: #12795f;
+      --accent-dark: #0c5946;
+      --accent-soft: #dff2eb;
+      --warn: #a66014;
+      --warn-soft: #fff1dd;
+      --danger: #af3434;
+      --danger-soft: #ffe8e8;
+      --ok: #1f7a3c;
+      --ok-soft: #e6f5e9;
+      --info: #285d8f;
+      --info-soft: #e7f0f8;
+      --shadow: 0 16px 36px rgba(31, 43, 35, 0.08);
+      --radius: 8px;
+      --focus: 0 0 0 3px rgba(18, 121, 95, 0.18);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+      min-width: 320px;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+      letter-spacing: 0;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.58;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: minmax(180px, 260px) minmax(240px, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(245, 246, 244, 0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--accent);
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.05;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .search-wrap {
+      position: relative;
+      min-width: 0;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      min-height: 40px;
+      padding: 0 14px 0 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--text);
+      outline: none;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--accent);
+      box-shadow: var(--focus);
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 13px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .button {
+      min-height: 38px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 12px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .button:hover {
+      border-color: var(--accent);
+      color: var(--accent-dark);
+    }
+
+    .button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .button.primary:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+      color: #ffffff;
+    }
+
+    .button.danger {
+      border-color: #e0b8b8;
+      color: var(--danger);
+    }
+
+    .button.danger:hover {
+      background: var(--danger-soft);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .button.ghost {
+      background: transparent;
+    }
+
+    .icon-btn {
+      width: 38px;
+      padding: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(140px, 1fr));
+      gap: 10px;
+      padding: 14px 18px 0;
+    }
+
+    .kpi {
+      min-height: 72px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 12px;
+      box-shadow: 0 8px 20px rgba(31, 43, 35, 0.04);
+      display: grid;
+      align-content: space-between;
+      gap: 8px;
+    }
+
+    .kpi span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .kpi strong {
+      font-size: clamp(20px, 2vw, 28px);
+      line-height: 1;
+    }
+
+    .main {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 250px minmax(420px, 1fr) 380px;
+      gap: 14px;
+      padding: 14px 18px 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .side {
+      position: sticky;
+      top: 96px;
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .filter-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .filter-button {
+      width: 100%;
+      min-height: 36px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 10px;
+      text-align: left;
+    }
+
+    .filter-button:hover,
+    .filter-button.active {
+      background: var(--panel-2);
+      border-color: var(--line);
+    }
+
+    .filter-button.active {
+      color: var(--accent-dark);
+      font-weight: 800;
+    }
+
+    .count {
+      min-width: 28px;
+      min-height: 22px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 7px;
+      border-radius: 999px;
+      background: #eef1ee;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .board {
+      overflow: hidden;
+    }
+
+    .board-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .view-tabs {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border-radius: var(--radius);
+      background: #eef1ee;
+    }
+
+    .tab-btn {
+      min-height: 31px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .tab-btn.active {
+      background: var(--panel);
+      color: var(--accent-dark);
+      box-shadow: 0 3px 8px rgba(31, 43, 35, 0.08);
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: calc(100vh - 248px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 850px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: #fafbf9;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    tbody tr {
+      background: var(--panel);
+    }
+
+    tbody tr:hover {
+      background: #f9fbfa;
+    }
+
+    tbody tr.selected {
+      background: var(--accent-soft);
+    }
+
+    .company-cell {
+      display: grid;
+      gap: 3px;
+      min-width: 190px;
+    }
+
+    .company-cell strong {
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .company-cell span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      border-radius: 999px;
+      padding: 0 9px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.neutral {
+      background: #eef1ee;
+      color: #49534d;
+    }
+
+    .badge.info {
+      background: var(--info-soft);
+      color: var(--info);
+    }
+
+    .badge.warn {
+      background: var(--warn-soft);
+      color: var(--warn);
+    }
+
+    .badge.ok {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .badge.danger {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .date-cell {
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .empty {
+      display: none;
+      min-height: 280px;
+      place-items: center;
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty.active {
+      display: grid;
+    }
+
+    .agenda {
+      display: none;
+      max-height: calc(100vh - 248px);
+      overflow: auto;
+    }
+
+    .agenda.active {
+      display: block;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+    }
+
+    .task-row {
+      display: grid;
+      grid-template-columns: minmax(120px, 1fr) auto;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      background: #fbfcfb;
+    }
+
+    .task-row strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .task-row span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .detail {
+      position: sticky;
+      top: 96px;
+      overflow: hidden;
+    }
+
+    .detail-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .detail-head h2 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    .detail-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .detail-actions {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .form {
+      max-height: calc(100vh - 174px);
+      overflow: auto;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--text);
+      outline: none;
+      padding: 8px 10px;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: var(--focus);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+
+    .form-footer {
+      position: sticky;
+      bottom: 0;
+      margin: 2px -14px -14px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.96);
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 50;
+      max-width: min(360px, calc(100vw - 36px));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #17211b;
+      color: #ffffff;
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1180px) {
+      .main {
+        grid-template-columns: 220px minmax(420px, 1fr);
+      }
+
+      .detail {
+        grid-column: 1 / -1;
+        position: static;
+      }
+
+      .form {
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 880px) {
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        justify-content: flex-start;
+      }
+
+      .kpis {
+        grid-template-columns: repeat(2, minmax(130px, 1fr));
+      }
+
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .side {
+        position: static;
+        order: 2;
+      }
+
+      .board {
+        order: 1;
+      }
+
+      .detail {
+        order: 3;
+      }
+
+      .filter-group {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .table-wrap,
+      .agenda {
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar,
+      .kpis,
+      .main {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .kpis {
+        grid-template-columns: 1fr;
+      }
+
+      .board-head,
+      .detail-head,
+      .form-footer {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .field-grid,
+      .filter-group {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">D</div>
+        <div>
+          <h1>Directo CRM</h1>
+          <p>Marketplace a compra directa</p>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="searchInput" type="search" autocomplete="off" placeholder="Buscar empresa, contacto, email, teléfono, pedido...">
+      </div>
+
+      <div class="toolbar" aria-label="Acciones">
+        <button class="button primary" id="newLeadBtn" type="button"><span aria-hidden="true">+</span> Nuevo cliente</button>
+        <button class="button" id="exportJsonBtn" type="button" title="Exportar copia JSON"><span aria-hidden="true">⇩</span> JSON</button>
+        <button class="button" id="exportExcelBtn" type="button" title="Exportar Excel"><span aria-hidden="true">⇩</span> Excel</button>
+        <button class="button" id="exportCsvBtn" type="button" title="Exportar CSV"><span aria-hidden="true">⇩</span> CSV</button>
+        <button class="button" id="importBtn" type="button" title="Importar JSON o CSV"><span aria-hidden="true">⇧</span> Importar</button>
+        <button class="button danger" id="clearDataBtn" type="button" title="Borrar todos los clientes guardados"><span aria-hidden="true">⌫</span> Borrar datos</button>
+        <input class="hidden" id="importFile" type="file" accept=".json,.csv,application/json,text/csv">
+      </div>
+    </header>
+
+    <section class="kpis" aria-label="Resumen">
+      <div class="kpi"><span>Pendientes hoy</span><strong id="kpiDue">0</strong></div>
+      <div class="kpi"><span>Próximos 7 días</span><strong id="kpiWeek">0</strong></div>
+      <div class="kpi"><span>Interesados</span><strong id="kpiInterested">0</strong></div>
+      <div class="kpi"><span>Convertidos</span><strong id="kpiWon">0</strong></div>
+      <div class="kpi"><span>Valor potencial</span><strong id="kpiValue">0 €</strong></div>
+    </section>
+
+    <main class="main">
+      <aside class="panel side">
+        <h2 class="panel-title">Estados</h2>
+        <div class="filter-group" id="stageFilters"></div>
+        <h2 class="panel-title">Canales</h2>
+        <div class="filter-group" id="platformFilters"></div>
+        <h2 class="panel-title">Fechas</h2>
+        <div class="filter-group" id="dateFilters"></div>
+      </aside>
+
+      <section class="panel board" aria-label="Clientes">
+        <div class="board-head">
+          <div class="view-tabs" role="tablist" aria-label="Vistas">
+            <button class="tab-btn active" id="listViewBtn" type="button" role="tab" aria-selected="true">Listado</button>
+            <button class="tab-btn" id="agendaViewBtn" type="button" role="tab" aria-selected="false">Agenda</button>
+          </div>
+          <div class="mini-actions">
+            <span class="badge neutral" id="resultCount">0 clientes</span>
+            <button class="button icon-btn" id="clearFiltersBtn" type="button" title="Limpiar filtros, no borra clientes" aria-label="Limpiar filtros, no borra clientes">×</button>
+          </div>
+        </div>
+
+        <div class="table-wrap" id="tableView">
+          <table>
+            <thead>
+              <tr>
+                <th>Empresa</th>
+                <th>Estado</th>
+                <th>Canal</th>
+                <th>Próxima acción</th>
+                <th>Fecha</th>
+                <th>Prioridad</th>
+                <th>Potencial</th>
+              </tr>
+            </thead>
+            <tbody id="leadRows"></tbody>
+          </table>
+          <div class="empty" id="emptyState">No hay clientes con estos filtros.</div>
+        </div>
+
+        <div class="agenda" id="agendaView">
+          <div class="task-list" id="taskList"></div>
+          <div class="empty" id="emptyAgenda">No hay acciones pendientes.</div>
+        </div>
+      </section>
+
+      <section class="panel detail" aria-label="Ficha de cliente">
+        <div class="detail-head">
+          <div>
+            <h2 id="detailTitle">Nueva oportunidad</h2>
+            <p id="detailSubtitle">Guarda una empresa para seguirla</p>
+          </div>
+          <div class="detail-actions">
+            <button class="button icon-btn" id="duplicateBtn" type="button" title="Duplicar ficha" aria-label="Duplicar ficha">⧉</button>
+            <button class="button icon-btn" id="deleteBtn" type="button" title="Eliminar ficha" aria-label="Eliminar ficha">⌫</button>
+          </div>
+        </div>
+
+        <form class="form" id="leadForm">
+          <div class="field-grid">
+            <div class="field full">
+              <label for="company">Empresa</label>
+              <input id="company" name="company" required autocomplete="organization">
+            </div>
+            <div class="field">
+              <label for="contact">Contacto</label>
+              <input id="contact" name="contact" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="position">Cargo</label>
+              <input id="position" name="position">
+            </div>
+            <div class="field">
+              <label for="phone">Teléfono</label>
+              <input id="phone" name="phone" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="platform">Canal origen</label>
+              <select id="platform" name="platform"></select>
+            </div>
+            <div class="field">
+              <label for="orderRef">Pedido marketplace</label>
+              <input id="orderRef" name="orderRef">
+            </div>
+            <div class="field">
+              <label for="lastPurchase">Última compra</label>
+              <input id="lastPurchase" name="lastPurchase" type="date">
+            </div>
+            <div class="field">
+              <label for="potential">Potencial anual</label>
+              <input id="potential" name="potential" type="number" min="0" step="1">
+            </div>
+            <div class="field">
+              <label for="stage">Estado</label>
+              <select id="stage" name="stage"></select>
+            </div>
+            <div class="field">
+              <label for="priority">Prioridad</label>
+              <select id="priority" name="priority"></select>
+            </div>
+            <div class="field">
+              <label for="nextDate">Próxima fecha</label>
+              <input id="nextDate" name="nextDate" type="date">
+            </div>
+            <div class="field">
+              <label for="nextAction">Próxima acción</label>
+              <select id="nextAction" name="nextAction"></select>
+            </div>
+            <div class="field full">
+              <label for="products">Productos comprados</label>
+              <input id="products" name="products">
+            </div>
+            <div class="field full">
+              <label for="notes">Notas</label>
+              <textarea id="notes" name="notes"></textarea>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <button class="button ghost" id="resetBtn" type="button">Limpiar</button>
+            <button class="button primary" type="submit">Guardar ficha</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "directo-crm-v2";
+
+    const stages = [
+      { id: "nuevo", label: "Nuevo", tone: "neutral" },
+      { id: "contactado", label: "Contactado", tone: "info" },
+      { id: "interesado", label: "Interesado", tone: "warn" },
+      { id: "propuesta", label: "Propuesta enviada", tone: "warn" },
+      { id: "convertido", label: "Convertido", tone: "ok" },
+      { id: "no_interesa", label: "No interesa", tone: "danger" }
+    ];
+
+    const platforms = [
+      "Amazon",
+      "PC Componentes",
+      "ManoMano",
+      "Marketplace otro",
+      "Referido",
+      "Web propia"
+    ];
+
+    const priorities = [
+      { id: "alta", label: "Alta", tone: "danger" },
+      { id: "media", label: "Media", tone: "warn" },
+      { id: "baja", label: "Baja", tone: "neutral" }
+    ];
+
+    const actions = [
+      "Llamar",
+      "Enviar email",
+      "Enviar tarifa",
+      "Enviar presupuesto",
+      "Pedir datos fiscales",
+      "Revisar compra",
+      "Cerrar seguimiento"
+    ];
+
+    const dateFilters = [
+      { id: "all", label: "Todas" },
+      { id: "overdue", label: "Atrasadas" },
+      { id: "today", label: "Hoy" },
+      { id: "week", label: "7 días" },
+      { id: "none", label: "Sin fecha" }
+    ];
+
+    const demoLeads = [];
+
+    let leads = loadLeads();
+    let selectedId = leads[0]?.id || null;
+    let filters = {
+      stage: "all",
+      platform: "all",
+      date: "all",
+      search: ""
+    };
+    let activeView = "list";
+
+    const els = {
+      searchInput: document.getElementById("searchInput"),
+      newLeadBtn: document.getElementById("newLeadBtn"),
+      exportJsonBtn: document.getElementById("exportJsonBtn"),
+      exportExcelBtn: document.getElementById("exportExcelBtn"),
+      exportCsvBtn: document.getElementById("exportCsvBtn"),
+      importBtn: document.getElementById("importBtn"),
+      clearDataBtn: document.getElementById("clearDataBtn"),
+      importFile: document.getElementById("importFile"),
+      kpiDue: document.getElementById("kpiDue"),
+      kpiWeek: document.getElementById("kpiWeek"),
+      kpiInterested: document.getElementById("kpiInterested"),
+      kpiWon: document.getElementById("kpiWon"),
+      kpiValue: document.getElementById("kpiValue"),
+      stageFilters: document.getElementById("stageFilters"),
+      platformFilters: document.getElementById("platformFilters"),
+      dateFilters: document.getElementById("dateFilters"),
+      leadRows: document.getElementById("leadRows"),
+      emptyState: document.getElementById("emptyState"),
+      resultCount: document.getElementById("resultCount"),
+      clearFiltersBtn: document.getElementById("clearFiltersBtn"),
+      listViewBtn: document.getElementById("listViewBtn"),
+      agendaViewBtn: document.getElementById("agendaViewBtn"),
+      tableView: document.getElementById("tableView"),
+      agendaView: document.getElementById("agendaView"),
+      taskList: document.getElementById("taskList"),
+      emptyAgenda: document.getElementById("emptyAgenda"),
+      detailTitle: document.getElementById("detailTitle"),
+      detailSubtitle: document.getElementById("detailSubtitle"),
+      duplicateBtn: document.getElementById("duplicateBtn"),
+      deleteBtn: document.getElementById("deleteBtn"),
+      leadForm: document.getElementById("leadForm"),
+      resetBtn: document.getElementById("resetBtn"),
+      toast: document.getElementById("toast")
+    };
+
+    const fields = [
+      "company",
+      "contact",
+      "position",
+      "phone",
+      "email",
+      "platform",
+      "orderRef",
+      "lastPurchase",
+      "potential",
+      "stage",
+      "priority",
+      "nextDate",
+      "nextAction",
+      "products",
+      "notes"
+    ];
+
+    const exportColumns = [
+      { key: "company", label: "Cliente / empresa" },
+      { key: "contact", label: "Contacto" },
+      { key: "position", label: "Cargo" },
+      { key: "phone", label: "Teléfono" },
+      { key: "email", label: "Email" },
+      { key: "platform", label: "Canal origen" },
+      { key: "orderRef", label: "Pedido marketplace" },
+      { key: "lastPurchase", label: "Última compra" },
+      { key: "products", label: "Productos comprados" },
+      { key: "potential", label: "Potencial anual (€)" },
+      { key: "stage", label: "Estado" },
+      { key: "priority", label: "Prioridad" },
+      { key: "nextDate", label: "Próxima fecha" },
+      { key: "nextAction", label: "Próxima acción" },
+      { key: "notes", label: "Notas" },
+      { key: "id", label: "ID interno" }
+    ];
+
+    init();
+
+    function init() {
+      populateSelects();
+      renderFilters();
+      bindEvents();
+      render();
+      fillForm(getSelectedLead() || blankLead());
+    }
+
+    function populateSelects() {
+      setOptions(document.getElementById("platform"), platforms.map(value => ({ value, label: value })));
+      setOptions(document.getElementById("stage"), stages.map(stage => ({ value: stage.id, label: stage.label })));
+      setOptions(document.getElementById("priority"), priorities.map(priority => ({ value: priority.id, label: priority.label })));
+      setOptions(document.getElementById("nextAction"), actions.map(value => ({ value, label: value })));
+    }
+
+    function setOptions(select, options) {
+      select.innerHTML = options.map(option => `<option value="${escapeAttr(option.value)}">${escapeHtml(option.label)}</option>`).join("");
+    }
+
+    function bindEvents() {
+      els.searchInput.addEventListener("input", event => {
+        filters.search = event.target.value.trim().toLowerCase();
+        render();
+      });
+
+      els.newLeadBtn.addEventListener("click", () => {
+        selectedId = null;
+        fillForm(blankLead());
+        updateDetailHeader(null);
+        document.getElementById("company").focus();
+      });
+
+      els.resetBtn.addEventListener("click", () => {
+        selectedId = null;
+        fillForm(blankLead());
+        updateDetailHeader(null);
+      });
+
+      els.leadForm.addEventListener("submit", event => {
+        event.preventDefault();
+        const lead = readForm();
+        if (!lead.company.trim()) {
+          showToast("La empresa es obligatoria.");
+          return;
+        }
+
+        if (selectedId) {
+          lead.id = selectedId;
+          leads = leads.map(item => item.id === selectedId ? lead : item);
+        } else {
+          lead.id = createId();
+          selectedId = lead.id;
+          leads = [lead, ...leads];
+        }
+
+        saveLeads();
+        render();
+        fillForm(lead);
+        showToast("Ficha guardada.");
+      });
+
+      els.deleteBtn.addEventListener("click", () => {
+        if (!selectedId) {
+          showToast("Selecciona una ficha para eliminar.");
+          return;
+        }
+        const lead = getSelectedLead();
+        if (!confirm(`Eliminar ${lead.company}?`)) return;
+        leads = leads.filter(item => item.id !== selectedId);
+        selectedId = leads[0]?.id || null;
+        saveLeads();
+        render();
+        fillForm(getSelectedLead() || blankLead());
+        showToast("Ficha eliminada.");
+      });
+
+      els.duplicateBtn.addEventListener("click", () => {
+        const lead = getSelectedLead();
+        if (!lead) {
+          showToast("Selecciona una ficha para duplicar.");
+          return;
+        }
+        const copy = {
+          ...lead,
+          id: createId(),
+          company: `${lead.company} copia`,
+          stage: "nuevo",
+          nextDate: shiftDate(2)
+        };
+        leads = [copy, ...leads];
+        selectedId = copy.id;
+        saveLeads();
+        render();
+        fillForm(copy);
+        showToast("Ficha duplicada.");
+      });
+
+      els.clearFiltersBtn.addEventListener("click", () => {
+        filters = { stage: "all", platform: "all", date: "all", search: "" };
+        els.searchInput.value = "";
+        renderFilters();
+        render();
+      });
+
+      els.listViewBtn.addEventListener("click", () => setView("list"));
+      els.agendaViewBtn.addEventListener("click", () => setView("agenda"));
+
+      els.exportJsonBtn.addEventListener("click", () => {
+        downloadFile(`directo-crm-${today()}.json`, JSON.stringify({ exportedAt: new Date().toISOString(), leads }, null, 2), "application/json");
+        showToast("JSON exportado.");
+      });
+
+      els.exportExcelBtn.addEventListener("click", () => {
+        downloadFile(`directo-crm-${today()}.xls`, toExcel(leads), "application/vnd.ms-excel;charset=utf-8");
+        showToast("Excel exportado.");
+      });
+
+      els.exportCsvBtn.addEventListener("click", () => {
+        downloadFile(`directo-crm-${today()}.csv`, toCsv(leads), "text/csv;charset=utf-8");
+        showToast("CSV exportado.");
+      });
+
+      els.importBtn.addEventListener("click", () => els.importFile.click());
+      els.importFile.addEventListener("change", importFile);
+      els.clearDataBtn.addEventListener("click", clearAllData);
+    }
+
+    function render() {
+      const filtered = getFilteredLeads();
+      renderKpis();
+      renderFilters();
+      renderTable(filtered);
+      renderAgenda(filtered);
+      updateDetailHeader(getSelectedLead());
+    }
+
+    function renderKpis() {
+      const active = leads.filter(lead => !["convertido", "no_interesa"].includes(lead.stage));
+      els.kpiDue.textContent = active.filter(isDueTodayOrEarlier).length;
+      els.kpiWeek.textContent = active.filter(isWithinWeek).length;
+      els.kpiInterested.textContent = leads.filter(lead => ["interesado", "propuesta"].includes(lead.stage)).length;
+      els.kpiWon.textContent = leads.filter(lead => lead.stage === "convertido").length;
+      els.kpiValue.textContent = formatCurrency(active.reduce((sum, lead) => sum + Number(lead.potential || 0), 0));
+    }
+
+    function renderFilters() {
+      const allStages = [{ id: "all", label: "Todos", tone: "neutral" }, ...stages];
+      els.stageFilters.innerHTML = allStages.map(stage => {
+        const count = stage.id === "all" ? leads.length : leads.filter(lead => lead.stage === stage.id).length;
+        return filterButton("stage", stage.id, stage.label, count, filters.stage === stage.id);
+      }).join("");
+
+      const allPlatforms = ["Todos", ...platforms];
+      els.platformFilters.innerHTML = allPlatforms.map(platform => {
+        const id = platform === "Todos" ? "all" : platform;
+        const count = id === "all" ? leads.length : leads.filter(lead => lead.platform === id).length;
+        return filterButton("platform", id, platform, count, filters.platform === id);
+      }).join("");
+
+      els.dateFilters.innerHTML = dateFilters.map(item => {
+        const count = countByDateFilter(item.id);
+        return filterButton("date", item.id, item.label, count, filters.date === item.id);
+      }).join("");
+
+      document.querySelectorAll("[data-filter-type]").forEach(button => {
+        button.addEventListener("click", () => {
+          filters[button.dataset.filterType] = button.dataset.filterValue;
+          render();
+        });
+      });
+    }
+
+    function filterButton(type, value, label, count, active) {
+      return `
+        <button class="filter-button ${active ? "active" : ""}" type="button" data-filter-type="${escapeAttr(type)}" data-filter-value="${escapeAttr(value)}">
+          <span>${escapeHtml(label)}</span>
+          <span class="count">${count}</span>
+        </button>
+      `;
+    }
+
+    function renderTable(filtered) {
+      els.resultCount.textContent = `${filtered.length} ${filtered.length === 1 ? "cliente" : "clientes"}`;
+      els.emptyState.classList.toggle("active", filtered.length === 0);
+      els.leadRows.innerHTML = filtered.map(lead => {
+        const stage = findStage(lead.stage);
+        const priority = findPriority(lead.priority);
+        return `
+          <tr class="${lead.id === selectedId ? "selected" : ""}" data-id="${escapeAttr(lead.id)}" tabindex="0">
+            <td>
+              <div class="company-cell">
+                <strong>${escapeHtml(lead.company || "Sin empresa")}</strong>
+                <span>${escapeHtml([lead.contact, lead.phone].filter(Boolean).join(" · ") || lead.email || "Sin contacto")}</span>
+              </div>
+            </td>
+            <td><span class="badge ${stage.tone}">${escapeHtml(stage.label)}</span></td>
+            <td><span class="badge neutral">${escapeHtml(lead.platform || "-")}</span></td>
+            <td>${escapeHtml(lead.nextAction || "-")}</td>
+            <td class="date-cell">${formatDate(lead.nextDate)}</td>
+            <td><span class="badge ${priority.tone}">${escapeHtml(priority.label)}</span></td>
+            <td class="date-cell">${formatCurrency(Number(lead.potential || 0))}</td>
+          </tr>
+        `;
+      }).join("");
+
+      els.leadRows.querySelectorAll("tr").forEach(row => {
+        row.addEventListener("click", () => selectLead(row.dataset.id));
+        row.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectLead(row.dataset.id);
+          }
+        });
+      });
+    }
+
+    function renderAgenda(filtered) {
+      const tasks = filtered
+        .filter(lead => lead.nextDate && !["convertido", "no_interesa"].includes(lead.stage))
+        .sort((a, b) => a.nextDate.localeCompare(b.nextDate));
+
+      els.emptyAgenda.classList.toggle("active", tasks.length === 0);
+      els.taskList.innerHTML = tasks.map(lead => {
+        const status = dateTone(lead.nextDate);
+        return `
+          <button class="task-row" type="button" data-id="${escapeAttr(lead.id)}">
+            <span>
+              <strong>${escapeHtml(lead.company)}</strong>
+              <span>${escapeHtml(lead.nextAction || "Seguimiento")} · ${escapeHtml(lead.contact || lead.phone || lead.email || "Sin contacto")}</span>
+            </span>
+            <span class="badge ${status.tone}">${escapeHtml(status.label)}</span>
+          </button>
+        `;
+      }).join("");
+
+      els.taskList.querySelectorAll(".task-row").forEach(row => {
+        row.addEventListener("click", () => {
+          selectLead(row.dataset.id);
+          setView("list");
+        });
+      });
+    }
+
+    function selectLead(id) {
+      selectedId = id;
+      const lead = getSelectedLead();
+      fillForm(lead || blankLead());
+      render();
+    }
+
+    function fillForm(lead) {
+      fields.forEach(name => {
+        const input = document.getElementById(name);
+        input.value = lead[name] ?? "";
+      });
+      updateDetailHeader(selectedId ? lead : null);
+    }
+
+    function readForm() {
+      const data = {};
+      fields.forEach(name => {
+        const input = document.getElementById(name);
+        data[name] = input.value.trim();
+      });
+      data.potential = Number(data.potential || 0);
+      return data;
+    }
+
+    function updateDetailHeader(lead) {
+      if (lead) {
+        els.detailTitle.textContent = lead.company || "Ficha sin empresa";
+        els.detailSubtitle.textContent = `${findStage(lead.stage).label} · ${lead.platform || "Sin canal"}`;
+      } else {
+        els.detailTitle.textContent = "Nueva oportunidad";
+        els.detailSubtitle.textContent = "Guarda una empresa para seguirla";
+      }
+      els.deleteBtn.disabled = !lead;
+      els.duplicateBtn.disabled = !lead;
+    }
+
+    function setView(view) {
+      activeView = view;
+      const isList = view === "list";
+      els.listViewBtn.classList.toggle("active", isList);
+      els.agendaViewBtn.classList.toggle("active", !isList);
+      els.listViewBtn.setAttribute("aria-selected", String(isList));
+      els.agendaViewBtn.setAttribute("aria-selected", String(!isList));
+      els.tableView.classList.toggle("hidden", !isList);
+      els.agendaView.classList.toggle("active", !isList);
+    }
+
+    function getFilteredLeads() {
+      return leads.filter(lead => {
+        if (filters.stage !== "all" && lead.stage !== filters.stage) return false;
+        if (filters.platform !== "all" && lead.platform !== filters.platform) return false;
+        if (!matchesDateFilter(lead, filters.date)) return false;
+        if (!filters.search) return true;
+        const haystack = fields.map(field => lead[field]).join(" ").toLowerCase();
+        return haystack.includes(filters.search);
+      });
+    }
+
+    function matchesDateFilter(lead, filter) {
+      if (filter === "all") return true;
+      if (filter === "none") return !lead.nextDate;
+      if (!lead.nextDate) return false;
+      if (filter === "overdue") return compareDates(lead.nextDate, today()) < 0;
+      if (filter === "today") return compareDates(lead.nextDate, today()) === 0;
+      if (filter === "week") return isWithinWeek(lead);
+      return true;
+    }
+
+    function countByDateFilter(filter) {
+      return leads.filter(lead => matchesDateFilter(lead, filter)).length;
+    }
+
+    function isDueTodayOrEarlier(lead) {
+      return lead.nextDate && compareDates(lead.nextDate, today()) <= 0;
+    }
+
+    function isWithinWeek(lead) {
+      if (!lead.nextDate) return false;
+      const diff = dayDiff(today(), lead.nextDate);
+      return diff >= 0 && diff <= 7;
+    }
+
+    function dateTone(dateString) {
+      const diff = dayDiff(today(), dateString);
+      if (diff < 0) return { label: "Atrasada", tone: "danger" };
+      if (diff === 0) return { label: "Hoy", tone: "warn" };
+      if (diff <= 7) return { label: `${diff} días`, tone: "info" };
+      return { label: formatDate(dateString), tone: "neutral" };
+    }
+
+    function getSelectedLead() {
+      return leads.find(lead => lead.id === selectedId) || null;
+    }
+
+    function blankLead() {
+      return {
+        id: "",
+        company: "",
+        contact: "",
+        position: "",
+        phone: "",
+        email: "",
+        platform: "Amazon",
+        orderRef: "",
+        lastPurchase: "",
+        potential: 0,
+        stage: "nuevo",
+        priority: "media",
+        nextDate: today(),
+        nextAction: "Llamar",
+        products: "",
+        notes: ""
+      };
+    }
+
+    function loadLeads() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return demoLeads;
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed : demoLeads;
+      } catch {
+        return demoLeads;
+      }
+    }
+
+    function saveLeads() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
+    }
+
+    function clearAllData() {
+      if (!leads.length) {
+        showToast("No hay clientes guardados para borrar.");
+        return;
+      }
+
+      const confirmed = confirm("Esto borrará todos los clientes guardados en este navegador. ¿Seguro que quieres continuar?");
+      if (!confirmed) return;
+
+      leads = [];
+      selectedId = null;
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("directo-crm-v1");
+      filters = { stage: "all", platform: "all", date: "all", search: "" };
+      els.searchInput.value = "";
+      render();
+      fillForm(blankLead());
+      showToast("Todos los datos se han borrado.");
+    }
+
+    function importFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const text = String(reader.result || "");
+          const imported = file.name.toLowerCase().endsWith(".csv") ? fromCsv(text) : fromJson(text);
+          if (!imported.length) {
+            showToast("No se encontraron fichas para importar.");
+            return;
+          }
+          leads = mergeLeads(leads, imported);
+          selectedId = leads[0]?.id || null;
+          saveLeads();
+          render();
+          fillForm(getSelectedLead() || blankLead());
+          showToast(`${imported.length} fichas importadas.`);
+        } catch (error) {
+          showToast("No se pudo importar el archivo.");
+        } finally {
+          event.target.value = "";
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function fromJson(text) {
+      const parsed = JSON.parse(text);
+      const rows = Array.isArray(parsed) ? parsed : parsed.leads;
+      if (!Array.isArray(rows)) return [];
+      return rows.map(normalizeLead);
+    }
+
+    function fromCsv(text) {
+      const rows = parseCsv(text);
+      if (rows.length < 2) return [];
+      const headers = rows[0].map(header => csvHeaderToKey(header.trim()));
+      return rows.slice(1).filter(row => row.some(Boolean)).map(row => {
+        const lead = {};
+        headers.forEach((header, index) => {
+          if (header) lead[header] = row[index] || "";
+        });
+        return normalizeLead(lead);
+      });
+    }
+
+    function csvHeaderToKey(header) {
+      if (["id", ...fields].includes(header)) return header;
+      const normalized = normalizeHeader(header);
+      const found = exportColumns.find(column => normalizeHeader(column.label) === normalized);
+      return found?.key || "";
+    }
+
+    function normalizeLead(raw) {
+      const lead = blankLead();
+      fields.forEach(field => {
+        if (raw[field] !== undefined) lead[field] = raw[field];
+      });
+      lead.id = raw.id || createId();
+      lead.potential = Number(raw.potential || 0);
+      if (!stages.some(stage => stage.id === lead.stage)) lead.stage = "nuevo";
+      if (!priorities.some(priority => priority.id === lead.priority)) lead.priority = "media";
+      if (!platforms.includes(lead.platform)) lead.platform = "Marketplace otro";
+      if (!actions.includes(lead.nextAction)) lead.nextAction = "Llamar";
+      return lead;
+    }
+
+    function mergeLeads(existing, imported) {
+      const byId = new Map(existing.map(lead => [lead.id, lead]));
+      imported.forEach(lead => byId.set(lead.id, lead));
+      return Array.from(byId.values());
+    }
+
+    function toCsv(items) {
+      const lines = [exportColumns.map(column => csvCell(column.label)).join(",")];
+      items.forEach(item => {
+        lines.push(exportColumns.map(column => csvCell(item[column.key] ?? "")).join(","));
+      });
+      return lines.join("\n");
+    }
+
+    function toExcel(items) {
+      const exportedAt = new Intl.DateTimeFormat("es-ES", {
+        dateStyle: "short",
+        timeStyle: "short"
+      }).format(new Date());
+
+      const headers = exportColumns
+        .filter(column => column.key !== "id")
+        .map(column => `<th>${escapeHtml(column.label)}</th>`)
+        .join("");
+
+      const rows = items.map(item => {
+        const cells = exportColumns
+          .filter(column => column.key !== "id")
+          .map(column => excelCell(item, column.key))
+          .join("");
+        return `<tr>${cells}</tr>`;
+      }).join("");
+
+      return `\ufeff<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    p { color: #666; margin: 0 0 16px; }
+    table { border-collapse: collapse; width: 100%; }
+    th { background: #12795f; color: #fff; font-weight: 700; }
+    th, td { border: 1px solid #cfd8d3; padding: 8px; text-align: left; vertical-align: top; }
+    td.number { text-align: right; mso-number-format: "0"; }
+    td.date { mso-number-format: "dd/mm/yyyy"; }
+  </style>
+</head>
+<body>
+  <h1>Directo CRM</h1>
+  <p>Exportado el ${escapeHtml(exportedAt)} · ${items.length} ${items.length === 1 ? "cliente" : "clientes"}</p>
+  <table>
+    <thead><tr>${headers}</tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+</body>
+</html>`;
+    }
+
+    function excelCell(item, key) {
+      const value = exportDisplayValue(item, key);
+      const className = key === "potential" ? "number" : key.includes("Date") || key === "lastPurchase" ? "date" : "";
+      return `<td class="${className}">${escapeHtml(value)}</td>`;
+    }
+
+    function exportDisplayValue(item, key) {
+      if (key === "stage") return findStage(item.stage).label;
+      if (key === "priority") return findPriority(item.priority).label;
+      if (key === "lastPurchase" || key === "nextDate") return formatDate(item[key]);
+      return item[key] ?? "";
+    }
+
+    function csvCell(value) {
+      const text = String(value).replace(/\r?\n/g, " ");
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    function normalizeHeader(value) {
+      return String(value || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
+    }
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let quoted = false;
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+        const next = text[i + 1];
+        if (char === '"' && quoted && next === '"') {
+          cell += '"';
+          i += 1;
+        } else if (char === '"') {
+          quoted = !quoted;
+        } else if (char === "," && !quoted) {
+          row.push(cell);
+          cell = "";
+        } else if ((char === "\n" || char === "\r") && !quoted) {
+          if (char === "\r" && next === "\n") i += 1;
+          row.push(cell);
+          rows.push(row);
+          row = [];
+          cell = "";
+        } else {
+          cell += char;
+        }
+      }
+      row.push(cell);
+      rows.push(row);
+      return rows;
+    }
+
+    function downloadFile(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function findStage(id) {
+      return stages.find(stage => stage.id === id) || stages[0];
+    }
+
+    function findPriority(id) {
+      return priorities.find(priority => priority.id === id) || priorities[1];
+    }
+
+    function formatDate(value) {
+      if (!value) return "-";
+      const [year, month, day] = value.split("-");
+      if (!year || !month || !day) return value;
+      return `${day}/${month}/${year}`;
+    }
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat("es-ES", {
+        style: "currency",
+        currency: "EUR",
+        maximumFractionDigits: 0
+      }).format(value || 0);
+    }
+
+    function createId() {
+      if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+      }
+      return `lead-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+    }
+
+    function today() {
+      return toLocalDateString(new Date());
+    }
+
+    function shiftDate(days) {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return toLocalDateString(date);
+    }
+
+    function toLocalDateString(date) {
+      const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+      return local.toISOString().slice(0, 10);
+    }
+
+    function compareDates(a, b) {
+      return a.localeCompare(b);
+    }
+
+    function dayDiff(a, b) {
+      const start = new Date(`${a}T00:00:00`);
+      const end = new Date(`${b}T00:00:00`);
+      return Math.round((end - start) / 86400000);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value);
+    }
+
+    let toastTimer = null;
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2400);
+    }
+  </script>
+</body>
+</html>

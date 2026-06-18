@@ -4,7 +4,9 @@ Mini CRM para llevar seguimiento de clientes que compran por marketplaces y conv
 
 ## Uso online
 
-Si está publicado con GitHub Pages, abre la URL de Pages del repositorio y trabaja directamente desde el navegador.
+Abre la URL pública de GitHub Pages:
+
+https://carlosf2003.github.io/directo-crm/
 
 ## Uso local
 
