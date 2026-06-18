@@ -194,6 +194,17 @@
       color: #ffffff;
     }
 
+    .button.danger {
+      border-color: #e0b8b8;
+      color: var(--danger);
+    }
+
+    .button.danger:hover {
+      background: var(--danger-soft);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
     .button.ghost {
       background: transparent;
     }
@@ -743,6 +754,7 @@
         <button class="button" id="exportExcelBtn" type="button" title="Exportar Excel"><span aria-hidden="true">⇩</span> Excel</button>
         <button class="button" id="exportCsvBtn" type="button" title="Exportar CSV"><span aria-hidden="true">⇩</span> CSV</button>
         <button class="button" id="importBtn" type="button" title="Importar JSON o CSV"><span aria-hidden="true">⇧</span> Importar</button>
+        <button class="button danger" id="clearDataBtn" type="button" title="Borrar todos los clientes guardados"><span aria-hidden="true">⌫</span> Borrar datos</button>
         <input class="hidden" id="importFile" type="file" accept=".json,.csv,application/json,text/csv">
       </div>
     </header>
@@ -773,7 +785,7 @@
           </div>
           <div class="mini-actions">
             <span class="badge neutral" id="resultCount">0 clientes</span>
-            <button class="button icon-btn" id="clearFiltersBtn" type="button" title="Limpiar filtros" aria-label="Limpiar filtros">×</button>
+            <button class="button icon-btn" id="clearFiltersBtn" type="button" title="Limpiar filtros, no borra clientes" aria-label="Limpiar filtros, no borra clientes">×</button>
           </div>
         </div>
 
@@ -952,6 +964,7 @@
       exportExcelBtn: document.getElementById("exportExcelBtn"),
       exportCsvBtn: document.getElementById("exportCsvBtn"),
       importBtn: document.getElementById("importBtn"),
+      clearDataBtn: document.getElementById("clearDataBtn"),
       importFile: document.getElementById("importFile"),
       kpiDue: document.getElementById("kpiDue"),
       kpiWeek: document.getElementById("kpiWeek"),
@@ -1143,6 +1156,7 @@
 
       els.importBtn.addEventListener("click", () => els.importFile.click());
       els.importFile.addEventListener("change", importFile);
+      els.clearDataBtn.addEventListener("click", clearAllData);
     }
 
     function render() {
@@ -1390,6 +1404,26 @@
 
     function saveLeads() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
+    }
+
+    function clearAllData() {
+      if (!leads.length) {
+        showToast("No hay clientes guardados para borrar.");
+        return;
+      }
+
+      const confirmed = confirm("Esto borrará todos los clientes guardados en este navegador. ¿Seguro que quieres continuar?");
+      if (!confirmed) return;
+
+      leads = [];
+      selectedId = null;
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("directo-crm-v1");
+      filters = { stage: "all", platform: "all", date: "all", search: "" };
+      els.searchInput.value = "";
+      render();
+      fillForm(blankLead());
+      showToast("Todos los datos se han borrado.");
     }
 
     function importFile(event) {

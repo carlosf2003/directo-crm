@@ -27,6 +27,9 @@ Para mover datos o hacer copia de seguridad:
 - `JSON`: copia completa para importar de nuevo en el CRM.
 - `Excel`: exportación legible para trabajar en Excel.
 - `CSV`: exportación compatible con hojas de cálculo.
+- `Borrar datos`: elimina todos los clientes guardados en ese navegador.
+
+La `X` del listado solo limpia filtros; no borra clientes.
 
 ## Canales incluidos
 
