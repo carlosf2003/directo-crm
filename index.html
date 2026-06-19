@@ -218,7 +218,7 @@
 
     .kpis {
       display: grid;
-      grid-template-columns: repeat(5, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 10px;
       padding: 14px 18px 0;
     }
@@ -245,6 +245,58 @@
     .kpi strong {
       font-size: clamp(20px, 2vw, 28px);
       line-height: 1;
+    }
+
+    .notice {
+      margin: 12px 18px 0;
+      border: 1px solid #d6c9a7;
+      border-radius: var(--radius);
+      background: #fff8e6;
+      color: #6b541e;
+      padding: 11px 13px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) minmax(240px, 1fr);
+      gap: 10px;
+      margin: 14px 18px 0;
+    }
+
+    .summary-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 12px;
+      min-width: 0;
+      box-shadow: 0 8px 20px rgba(31, 43, 35, 0.04);
+    }
+
+    .summary-panel h2 {
+      margin: 0 0 10px;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .summary-line strong {
+      color: var(--text);
+      text-align: right;
     }
 
     .main {
@@ -282,6 +334,11 @@
     .filter-group {
       display: grid;
       gap: 8px;
+    }
+
+    .advanced-filters {
+      display: grid;
+      gap: 9px;
     }
 
     .filter-button {
@@ -375,7 +432,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 850px;
+      min-width: 950px;
     }
 
     th,
@@ -494,10 +551,99 @@
       display: block;
     }
 
+    .pipeline {
+      display: none;
+      max-height: calc(100vh - 248px);
+      overflow: auto;
+      padding: 14px;
+    }
+
+    .pipeline.active {
+      display: block;
+    }
+
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(210px, 1fr));
+      gap: 10px;
+      min-width: 1540px;
+    }
+
+    .pipeline-column {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f9fbfa;
+      min-height: 220px;
+      padding: 10px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .pipeline-column h3 {
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .pipeline-card {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .pipeline-card:hover {
+      border-color: var(--accent);
+    }
+
+    .pipeline-card strong {
+      font-size: 14px;
+    }
+
+    .pipeline-meta {
+      display: grid;
+      gap: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .pipeline-card select {
+      min-height: 32px;
+      font-size: 12px;
+    }
+
     .task-list {
       display: grid;
       gap: 8px;
       padding: 14px;
+    }
+
+    .task-section {
+      display: grid;
+      gap: 8px;
+    }
+
+    .task-section h3 {
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .task-row.overdue {
+      border-color: #efb4b4;
+      background: #fff6f6;
     }
 
     .task-row {
@@ -553,6 +699,19 @@
       display: flex;
       align-items: flex-start;
       gap: 8px;
+    }
+
+    .quick-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 2px;
+    }
+
+    .quick-actions .button {
+      min-height: 34px;
+      font-size: 12px;
     }
 
     .form {
@@ -623,6 +782,61 @@
       gap: 10px;
     }
 
+    .activity-box {
+      grid-column: 1 / -1;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      background: #fbfcfb;
+    }
+
+    .activity-box h3 {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .activity-form {
+      display: grid;
+      grid-template-columns: 120px 1fr 1fr;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .activity-form textarea {
+      min-height: 64px;
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 8px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .activity-item {
+      border-left: 3px solid var(--accent);
+      background: var(--panel);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 8px 10px;
+    }
+
+    .activity-item strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .activity-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -654,6 +868,10 @@
     @media (max-width: 1180px) {
       .main {
         grid-template-columns: 220px minmax(420px, 1fr);
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
       }
 
       .detail {
@@ -701,8 +919,13 @@
       }
 
       .table-wrap,
-      .agenda {
+      .agenda,
+      .pipeline {
         max-height: none;
+      }
+
+      .activity-form {
+        grid-template-columns: 1fr 1fr;
       }
     }
 
@@ -726,7 +949,8 @@
       }
 
       .field-grid,
-      .filter-group {
+      .filter-group,
+      .activity-form {
         grid-template-columns: 1fr;
       }
     }
@@ -750,10 +974,14 @@
 
       <div class="toolbar" aria-label="Acciones">
         <button class="button primary" id="newLeadBtn" type="button"><span aria-hidden="true">+</span> Nuevo cliente</button>
-        <button class="button" id="exportJsonBtn" type="button" title="Exportar copia JSON"><span aria-hidden="true">⇩</span> JSON</button>
+        <button class="button" id="exportJsonBtn" type="button" title="Copia de seguridad JSON"><span aria-hidden="true">⇩</span> Copia JSON</button>
         <button class="button" id="exportExcelBtn" type="button" title="Exportar Excel"><span aria-hidden="true">⇩</span> Excel</button>
         <button class="button" id="exportCsvBtn" type="button" title="Exportar CSV"><span aria-hidden="true">⇩</span> CSV</button>
-        <button class="button" id="importBtn" type="button" title="Importar JSON o CSV"><span aria-hidden="true">⇧</span> Importar</button>
+        <select id="importMode" title="Modo de importación">
+          <option value="merge">Fusionar</option>
+          <option value="replace">Reemplazar</option>
+        </select>
+        <button class="button" id="importBtn" type="button" title="Restaurar JSON o importar CSV"><span aria-hidden="true">⇧</span> Restaurar copia</button>
         <button class="button danger" id="clearDataBtn" type="button" title="Borrar todos los clientes guardados"><span aria-hidden="true">⌫</span> Borrar datos</button>
         <input class="hidden" id="importFile" type="file" accept=".json,.csv,application/json,text/csv">
       </div>
@@ -765,6 +993,27 @@
       <div class="kpi"><span>Interesados</span><strong id="kpiInterested">0</strong></div>
       <div class="kpi"><span>Convertidos</span><strong id="kpiWon">0</strong></div>
       <div class="kpi"><span>Valor potencial</span><strong id="kpiValue">0 €</strong></div>
+      <div class="kpi"><span>Sin próxima acción</span><strong id="kpiNoAction">0</strong></div>
+      <div class="kpi"><span>Atrasadas</span><strong id="kpiOverdue">0</strong></div>
+      <div class="kpi"><span>Valor ponderado</span><strong id="kpiWeighted">0 €</strong></div>
+      <div class="kpi"><span>Ganados este mes</span><strong id="kpiWonMonth">0</strong></div>
+      <div class="kpi"><span>Perdidos</span><strong id="kpiLost">0</strong></div>
+      <div class="kpi"><span>Conversión</span><strong id="kpiConversion">0%</strong></div>
+    </section>
+
+    <div class="notice">
+      Los datos se guardan en este navegador. Haz copias de seguridad periódicas. Para uso con datos sensibles o varios usuarios, se recomienda una versión con login y base de datos.
+    </div>
+
+    <section class="dashboard" aria-label="Resumen comercial">
+      <div class="summary-panel">
+        <h2>Valor por estado</h2>
+        <div class="summary-list" id="stageValueList"></div>
+      </div>
+      <div class="summary-panel">
+        <h2>Top 5 por potencial</h2>
+        <div class="summary-list" id="topPotentialList"></div>
+      </div>
     </section>
 
     <main class="main">
@@ -775,6 +1024,34 @@
         <div class="filter-group" id="platformFilters"></div>
         <h2 class="panel-title">Fechas</h2>
         <div class="filter-group" id="dateFilters"></div>
+        <h2 class="panel-title">Filtros avanzados</h2>
+        <div class="advanced-filters">
+          <div class="field">
+            <label for="priorityFilter">Prioridad</label>
+            <select id="priorityFilter"></select>
+          </div>
+          <div class="field">
+            <label for="customerTypeFilter">Tipo</label>
+            <select id="customerTypeFilter"></select>
+          </div>
+          <div class="field">
+            <label for="salespersonFilter">Comercial</label>
+            <select id="salespersonFilter"></select>
+          </div>
+          <div class="field">
+            <label for="probabilityFilter">Probabilidad</label>
+            <select id="probabilityFilter"></select>
+          </div>
+          <div class="field">
+            <label for="nextActionFilter">Próxima acción</label>
+            <select id="nextActionFilter">
+              <option value="all">Todas</option>
+              <option value="with">Con próxima acción</option>
+              <option value="without">Sin próxima acción</option>
+              <option value="overdue">Atrasadas</option>
+            </select>
+          </div>
+        </div>
       </aside>
 
       <section class="panel board" aria-label="Clientes">
@@ -782,6 +1059,7 @@
           <div class="view-tabs" role="tablist" aria-label="Vistas">
             <button class="tab-btn active" id="listViewBtn" type="button" role="tab" aria-selected="true">Listado</button>
             <button class="tab-btn" id="agendaViewBtn" type="button" role="tab" aria-selected="false">Agenda</button>
+            <button class="tab-btn" id="pipelineViewBtn" type="button" role="tab" aria-selected="false">Pipeline</button>
           </div>
           <div class="mini-actions">
             <span class="badge neutral" id="resultCount">0 clientes</span>
@@ -799,6 +1077,7 @@
                 <th>Próxima acción</th>
                 <th>Fecha</th>
                 <th>Prioridad</th>
+                <th>Prob.</th>
                 <th>Potencial</th>
               </tr>
             </thead>
@@ -811,6 +1090,11 @@
           <div class="task-list" id="taskList"></div>
           <div class="empty" id="emptyAgenda">No hay acciones pendientes.</div>
         </div>
+
+        <div class="pipeline" id="pipelineView">
+          <div class="pipeline-grid" id="pipelineGrid"></div>
+          <div class="empty" id="emptyPipeline">No hay oportunidades en el pipeline.</div>
+        </div>
       </section>
 
       <section class="panel detail" aria-label="Ficha de cliente">
@@ -818,6 +1102,7 @@
           <div>
             <h2 id="detailTitle">Nueva oportunidad</h2>
             <p id="detailSubtitle">Guarda una empresa para seguirla</p>
+            <div class="quick-actions" id="quickActions"></div>
           </div>
           <div class="detail-actions">
             <button class="button icon-btn" id="duplicateBtn" type="button" title="Duplicar ficha" aria-label="Duplicar ficha">⧉</button>
@@ -848,6 +1133,30 @@
               <input id="email" name="email" type="email" autocomplete="email">
             </div>
             <div class="field">
+              <label for="cif">CIF/NIF</label>
+              <input id="cif" name="cif">
+            </div>
+            <div class="field">
+              <label for="website">Web empresa</label>
+              <input id="website" name="website" type="url" placeholder="https://">
+            </div>
+            <div class="field">
+              <label for="city">Ciudad</label>
+              <input id="city" name="city">
+            </div>
+            <div class="field">
+              <label for="province">Provincia</label>
+              <input id="province" name="province">
+            </div>
+            <div class="field">
+              <label for="customerType">Tipo de cliente</label>
+              <select id="customerType" name="customerType"></select>
+            </div>
+            <div class="field">
+              <label for="assignedSalesperson">Comercial asignado</label>
+              <input id="assignedSalesperson" name="assignedSalesperson">
+            </div>
+            <div class="field">
               <label for="platform">Canal origen</label>
               <select id="platform" name="platform"></select>
             </div>
@@ -864,6 +1173,22 @@
               <input id="potential" name="potential" type="number" min="0" step="1">
             </div>
             <div class="field">
+              <label for="interestProduct">Producto de interés</label>
+              <input id="interestProduct" name="interestProduct">
+            </div>
+            <div class="field">
+              <label for="estimatedTicket">Ticket estimado</label>
+              <input id="estimatedTicket" name="estimatedTicket" type="number" min="0" step="1">
+            </div>
+            <div class="field">
+              <label for="estimatedMargin">Margen estimado</label>
+              <input id="estimatedMargin" name="estimatedMargin" type="number" min="0" step="1">
+            </div>
+            <div class="field">
+              <label for="closeProbability">Probabilidad cierre</label>
+              <select id="closeProbability" name="closeProbability"></select>
+            </div>
+            <div class="field">
               <label for="stage">Estado</label>
               <select id="stage" name="stage"></select>
             </div>
@@ -876,8 +1201,16 @@
               <input id="nextDate" name="nextDate" type="date">
             </div>
             <div class="field">
+              <label for="lastContactDate">Último contacto</label>
+              <input id="lastContactDate" name="lastContactDate" type="date">
+            </div>
+            <div class="field">
               <label for="nextAction">Próxima acción</label>
               <select id="nextAction" name="nextAction"></select>
+            </div>
+            <div class="field">
+              <label for="lossReason">Motivo de pérdida</label>
+              <input id="lossReason" name="lossReason">
             </div>
             <div class="field full">
               <label for="products">Productos comprados</label>
@@ -886,6 +1219,33 @@
             <div class="field full">
               <label for="notes">Notas</label>
               <textarea id="notes" name="notes"></textarea>
+            </div>
+            <div class="activity-box">
+              <h3>Historial de actividad</h3>
+              <div class="activity-form">
+                <div class="field">
+                  <label for="activityDate">Fecha</label>
+                  <input id="activityDate" type="date">
+                </div>
+                <div class="field">
+                  <label for="activityType">Tipo</label>
+                  <select id="activityType"></select>
+                </div>
+                <div class="field">
+                  <label for="activityNextAction">Actualizar próxima acción</label>
+                  <select id="activityNextAction"></select>
+                </div>
+                <div class="field">
+                  <label for="activityNextDate">Actualizar próxima fecha</label>
+                  <input id="activityNextDate" type="date">
+                </div>
+                <div class="field full">
+                  <label for="activityNote">Nota</label>
+                  <textarea id="activityNote" placeholder="Resumen de llamada, email, WhatsApp..."></textarea>
+                </div>
+                <button class="button primary" id="addActivityBtn" type="button">Añadir actividad</button>
+              </div>
+              <div class="activity-list" id="activityList"></div>
             </div>
           </div>
 
@@ -901,15 +1261,17 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const STORAGE_KEY = "directo-crm-v2";
+    const STORAGE_KEY = "directo-crm-v3";
+    const LEGACY_STORAGE_KEYS = ["directo-crm-v2", "directo-crm-v1"];
 
     const stages = [
       { id: "nuevo", label: "Nuevo", tone: "neutral" },
       { id: "contactado", label: "Contactado", tone: "info" },
       { id: "interesado", label: "Interesado", tone: "warn" },
       { id: "propuesta", label: "Propuesta enviada", tone: "warn" },
+      { id: "seguimiento", label: "Seguimiento", tone: "info" },
       { id: "convertido", label: "Convertido", tone: "ok" },
-      { id: "no_interesa", label: "No interesa", tone: "danger" }
+      { id: "no_interesa", label: "Perdido / No interesa", tone: "danger" }
     ];
 
     const platforms = [
@@ -935,7 +1297,32 @@
       "Enviar presupuesto",
       "Pedir datos fiscales",
       "Revisar compra",
+      "WhatsApp",
       "Cerrar seguimiento"
+    ];
+
+    const customerTypes = [
+      "Empresa",
+      "Autónomo",
+      "Colegio / formación",
+      "Administración pública",
+      "Revendedor",
+      "Particular",
+      "Otro"
+    ];
+
+    const closeProbabilities = [0, 25, 50, 75, 100];
+
+    const activityTypes = [
+      "Llamada",
+      "Email",
+      "WhatsApp",
+      "Presupuesto enviado",
+      "Seguimiento",
+      "Nota interna",
+      "Compra",
+      "Cambio de estado",
+      "Otro"
     ];
 
     const dateFilters = [
@@ -950,12 +1337,7 @@
 
     let leads = loadLeads();
     let selectedId = leads[0]?.id || null;
-    let filters = {
-      stage: "all",
-      platform: "all",
-      date: "all",
-      search: ""
-    };
+    let filters = defaultFilters();
     let activeView = "list";
 
     const els = {
@@ -965,6 +1347,7 @@
       exportExcelBtn: document.getElementById("exportExcelBtn"),
       exportCsvBtn: document.getElementById("exportCsvBtn"),
       importBtn: document.getElementById("importBtn"),
+      importMode: document.getElementById("importMode"),
       clearDataBtn: document.getElementById("clearDataBtn"),
       importFile: document.getElementById("importFile"),
       kpiDue: document.getElementById("kpiDue"),
@@ -972,25 +1355,50 @@
       kpiInterested: document.getElementById("kpiInterested"),
       kpiWon: document.getElementById("kpiWon"),
       kpiValue: document.getElementById("kpiValue"),
+      kpiNoAction: document.getElementById("kpiNoAction"),
+      kpiOverdue: document.getElementById("kpiOverdue"),
+      kpiWeighted: document.getElementById("kpiWeighted"),
+      kpiWonMonth: document.getElementById("kpiWonMonth"),
+      kpiLost: document.getElementById("kpiLost"),
+      kpiConversion: document.getElementById("kpiConversion"),
+      stageValueList: document.getElementById("stageValueList"),
+      topPotentialList: document.getElementById("topPotentialList"),
       stageFilters: document.getElementById("stageFilters"),
       platformFilters: document.getElementById("platformFilters"),
       dateFilters: document.getElementById("dateFilters"),
+      priorityFilter: document.getElementById("priorityFilter"),
+      customerTypeFilter: document.getElementById("customerTypeFilter"),
+      salespersonFilter: document.getElementById("salespersonFilter"),
+      probabilityFilter: document.getElementById("probabilityFilter"),
+      nextActionFilter: document.getElementById("nextActionFilter"),
       leadRows: document.getElementById("leadRows"),
       emptyState: document.getElementById("emptyState"),
       resultCount: document.getElementById("resultCount"),
       clearFiltersBtn: document.getElementById("clearFiltersBtn"),
       listViewBtn: document.getElementById("listViewBtn"),
       agendaViewBtn: document.getElementById("agendaViewBtn"),
+      pipelineViewBtn: document.getElementById("pipelineViewBtn"),
       tableView: document.getElementById("tableView"),
       agendaView: document.getElementById("agendaView"),
+      pipelineView: document.getElementById("pipelineView"),
+      pipelineGrid: document.getElementById("pipelineGrid"),
+      emptyPipeline: document.getElementById("emptyPipeline"),
       taskList: document.getElementById("taskList"),
       emptyAgenda: document.getElementById("emptyAgenda"),
       detailTitle: document.getElementById("detailTitle"),
       detailSubtitle: document.getElementById("detailSubtitle"),
+      quickActions: document.getElementById("quickActions"),
       duplicateBtn: document.getElementById("duplicateBtn"),
       deleteBtn: document.getElementById("deleteBtn"),
       leadForm: document.getElementById("leadForm"),
       resetBtn: document.getElementById("resetBtn"),
+      addActivityBtn: document.getElementById("addActivityBtn"),
+      activityDate: document.getElementById("activityDate"),
+      activityType: document.getElementById("activityType"),
+      activityNote: document.getElementById("activityNote"),
+      activityNextDate: document.getElementById("activityNextDate"),
+      activityNextAction: document.getElementById("activityNextAction"),
+      activityList: document.getElementById("activityList"),
       toast: document.getElementById("toast")
     };
 
@@ -1000,14 +1408,26 @@
       "position",
       "phone",
       "email",
+      "cif",
+      "website",
+      "city",
+      "province",
+      "customerType",
       "platform",
       "orderRef",
       "lastPurchase",
       "potential",
+      "interestProduct",
+      "estimatedTicket",
+      "estimatedMargin",
+      "closeProbability",
       "stage",
       "priority",
       "nextDate",
+      "lastContactDate",
       "nextAction",
+      "assignedSalesperson",
+      "lossReason",
       "products",
       "notes"
     ];
@@ -1018,18 +1438,73 @@
       { key: "position", label: "Cargo" },
       { key: "phone", label: "Teléfono" },
       { key: "email", label: "Email" },
+      { key: "cif", label: "CIF/NIF" },
+      { key: "website", label: "Web empresa" },
+      { key: "city", label: "Ciudad" },
+      { key: "province", label: "Provincia" },
+      { key: "customerType", label: "Tipo de cliente" },
       { key: "platform", label: "Canal origen" },
       { key: "orderRef", label: "Pedido marketplace" },
       { key: "lastPurchase", label: "Última compra" },
       { key: "products", label: "Productos comprados" },
+      { key: "interestProduct", label: "Producto de interés" },
       { key: "potential", label: "Potencial anual (€)" },
+      { key: "estimatedTicket", label: "Ticket estimado" },
+      { key: "estimatedMargin", label: "Margen estimado" },
+      { key: "closeProbability", label: "Probabilidad cierre (%)" },
       { key: "stage", label: "Estado" },
       { key: "priority", label: "Prioridad" },
       { key: "nextDate", label: "Próxima fecha" },
+      { key: "lastContactDate", label: "Último contacto" },
       { key: "nextAction", label: "Próxima acción" },
+      { key: "assignedSalesperson", label: "Comercial asignado" },
+      { key: "lossReason", label: "Motivo de pérdida" },
       { key: "notes", label: "Notas" },
       { key: "id", label: "ID interno" }
     ];
+
+    const headerAliases = {
+      empresa: "company",
+      cliente: "company",
+      "nombre empresa": "company",
+      "business name": "company",
+      company: "company",
+      contacto: "contact",
+      nombre: "contact",
+      "customer name": "contact",
+      comprador: "contact",
+      email: "email",
+      correo: "email",
+      "correo electronico": "email",
+      "e mail": "email",
+      telefono: "phone",
+      phone: "phone",
+      mobile: "phone",
+      movil: "phone",
+      pedido: "orderRef",
+      "order id": "orderRef",
+      "order number": "orderRef",
+      "referencia pedido": "orderRef",
+      producto: "products",
+      productos: "products",
+      "product name": "products",
+      item: "products",
+      importe: "estimatedTicket",
+      total: "estimatedTicket",
+      "order total": "estimatedTicket",
+      amount: "estimatedTicket",
+      canal: "platform",
+      marketplace: "platform",
+      origen: "platform",
+      source: "platform",
+      cif: "cif",
+      nif: "cif",
+      web: "website",
+      website: "website",
+      ciudad: "city",
+      provincia: "province",
+      comercial: "assignedSalesperson"
+    };
 
     init();
 
@@ -1046,6 +1521,14 @@
       setOptions(document.getElementById("stage"), stages.map(stage => ({ value: stage.id, label: stage.label })));
       setOptions(document.getElementById("priority"), priorities.map(priority => ({ value: priority.id, label: priority.label })));
       setOptions(document.getElementById("nextAction"), actions.map(value => ({ value, label: value })));
+      setOptions(document.getElementById("customerType"), customerTypes.map(value => ({ value, label: value })));
+      setOptions(document.getElementById("closeProbability"), closeProbabilities.map(value => ({ value: String(value), label: `${value}%` })));
+      setOptions(document.getElementById("activityType"), activityTypes.map(value => ({ value, label: value })));
+      setOptions(document.getElementById("activityNextAction"), [{ value: "", label: "No cambiar" }, ...actions.map(value => ({ value, label: value }))]);
+      setOptions(els.priorityFilter, [{ value: "all", label: "Todas" }, ...priorities.map(priority => ({ value: priority.id, label: priority.label }))]);
+      setOptions(els.customerTypeFilter, [{ value: "all", label: "Todos" }, ...customerTypes.map(value => ({ value, label: value }))]);
+      setOptions(els.probabilityFilter, [{ value: "all", label: "Todas" }, ...closeProbabilities.map(value => ({ value: String(value), label: `${value}%` }))]);
+      updateSalespersonFilter();
     }
 
     function setOptions(select, options) {
@@ -1073,6 +1556,7 @@
 
       els.leadForm.addEventListener("submit", event => {
         event.preventDefault();
+        const previous = getSelectedLead();
         const lead = readForm();
         if (!lead.company.trim()) {
           showToast("La empresa es obligatoria.");
@@ -1081,9 +1565,17 @@
 
         if (selectedId) {
           lead.id = selectedId;
+          lead.activityLog = previous?.activityLog || [];
+          if (previous && previous.stage !== lead.stage) {
+            lead.activityLog = addActivityEntry(lead.activityLog, {
+              type: "Cambio de estado",
+              note: `${findStage(previous.stage).label} → ${findStage(lead.stage).label}`
+            });
+          }
           leads = leads.map(item => item.id === selectedId ? lead : item);
         } else {
           lead.id = createId();
+          lead.activityLog = [];
           selectedId = lead.id;
           leads = [lead, ...leads];
         }
@@ -1131,14 +1623,27 @@
       });
 
       els.clearFiltersBtn.addEventListener("click", () => {
-        filters = { stage: "all", platform: "all", date: "all", search: "" };
+        filters = defaultFilters();
         els.searchInput.value = "";
+        syncFilterControls();
         renderFilters();
         render();
       });
 
       els.listViewBtn.addEventListener("click", () => setView("list"));
       els.agendaViewBtn.addEventListener("click", () => setView("agenda"));
+      els.pipelineViewBtn.addEventListener("click", () => setView("pipeline"));
+
+      [els.priorityFilter, els.customerTypeFilter, els.salespersonFilter, els.probabilityFilter, els.nextActionFilter].forEach(select => {
+        select.addEventListener("change", () => {
+          filters.priority = els.priorityFilter.value;
+          filters.customerType = els.customerTypeFilter.value;
+          filters.assignedSalesperson = els.salespersonFilter.value;
+          filters.probability = els.probabilityFilter.value;
+          filters.nextActionState = els.nextActionFilter.value;
+          render();
+        });
+      });
 
       els.exportJsonBtn.addEventListener("click", () => {
         downloadFile(`directo-crm-${today()}.json`, JSON.stringify({ exportedAt: new Date().toISOString(), leads }, null, 2), "application/json");
@@ -1158,14 +1663,18 @@
       els.importBtn.addEventListener("click", () => els.importFile.click());
       els.importFile.addEventListener("change", importFile);
       els.clearDataBtn.addEventListener("click", clearAllData);
+      els.addActivityBtn.addEventListener("click", addActivityFromForm);
     }
 
     function render() {
       const filtered = getFilteredLeads();
+      updateSalespersonFilter();
       renderKpis();
       renderFilters();
+      renderDashboard();
       renderTable(filtered);
       renderAgenda(filtered);
+      renderPipeline(filtered);
       updateDetailHeader(getSelectedLead());
     }
 
@@ -1176,6 +1685,29 @@
       els.kpiInterested.textContent = leads.filter(lead => ["interesado", "propuesta"].includes(lead.stage)).length;
       els.kpiWon.textContent = leads.filter(lead => lead.stage === "convertido").length;
       els.kpiValue.textContent = formatCurrency(active.reduce((sum, lead) => sum + Number(lead.potential || 0), 0));
+      els.kpiNoAction.textContent = active.filter(lead => !lead.nextDate && !lead.nextAction).length;
+      els.kpiOverdue.textContent = active.filter(lead => lead.nextDate && compareDates(lead.nextDate, today()) < 0).length;
+      els.kpiWeighted.textContent = formatCurrency(active.reduce((sum, lead) => sum + weightedValue(lead), 0));
+      els.kpiWonMonth.textContent = leads.filter(isWonThisMonth).length;
+      els.kpiLost.textContent = leads.filter(lead => lead.stage === "no_interesa").length;
+      const conversion = leads.length ? Math.round((leads.filter(lead => lead.stage === "convertido").length / leads.length) * 100) : 0;
+      els.kpiConversion.textContent = `${conversion}%`;
+    }
+
+    function renderDashboard() {
+      els.stageValueList.innerHTML = stages.map(stage => {
+        const value = leads
+          .filter(lead => lead.stage === stage.id)
+          .reduce((sum, lead) => sum + Number(lead.potential || 0), 0);
+        return `<div class="summary-line"><span>${escapeHtml(stage.label)}</span><strong>${formatCurrency(value)}</strong></div>`;
+      }).join("");
+
+      const top = [...leads]
+        .sort((a, b) => Number(b.potential || 0) - Number(a.potential || 0))
+        .slice(0, 5);
+      els.topPotentialList.innerHTML = top.length
+        ? top.map(lead => `<div class="summary-line"><span>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</span><strong>${formatCurrency(Number(lead.potential || 0))}</strong></div>`).join("")
+        : `<div class="summary-line"><span>Sin datos todavía</span><strong>0 €</strong></div>`;
     }
 
     function renderFilters() {
@@ -1233,6 +1765,7 @@
             <td>${escapeHtml(lead.nextAction || "-")}</td>
             <td class="date-cell">${formatDate(lead.nextDate)}</td>
             <td><span class="badge ${priority.tone}">${escapeHtml(priority.label)}</span></td>
+            <td class="date-cell">${Number(lead.closeProbability || 0)}%</td>
             <td class="date-cell">${formatCurrency(Number(lead.potential || 0))}</td>
           </tr>
         `;
@@ -1251,22 +1784,23 @@
 
     function renderAgenda(filtered) {
       const tasks = filtered
-        .filter(lead => lead.nextDate && !["convertido", "no_interesa"].includes(lead.stage))
+        .filter(lead => !["convertido", "no_interesa"].includes(lead.stage))
         .sort((a, b) => a.nextDate.localeCompare(b.nextDate));
 
       els.emptyAgenda.classList.toggle("active", tasks.length === 0);
-      els.taskList.innerHTML = tasks.map(lead => {
-        const status = dateTone(lead.nextDate);
-        return `
-          <button class="task-row" type="button" data-id="${escapeAttr(lead.id)}">
-            <span>
-              <strong>${escapeHtml(lead.company)}</strong>
-              <span>${escapeHtml(lead.nextAction || "Seguimiento")} · ${escapeHtml(lead.contact || lead.phone || lead.email || "Sin contacto")}</span>
-            </span>
-            <span class="badge ${status.tone}">${escapeHtml(status.label)}</span>
-          </button>
-        `;
-      }).join("");
+      const groups = [
+        { title: "Atrasadas", items: tasks.filter(lead => lead.nextDate && compareDates(lead.nextDate, today()) < 0) },
+        { title: "Hoy", items: tasks.filter(lead => lead.nextDate && compareDates(lead.nextDate, today()) === 0) },
+        { title: "Próximos 7 días", items: tasks.filter(lead => isWithinWeek(lead) && compareDates(lead.nextDate, today()) > 0) },
+        { title: "Sin fecha", items: tasks.filter(lead => !lead.nextDate) }
+      ];
+
+      els.taskList.innerHTML = groups.map(group => `
+        <div class="task-section">
+          <h3>${escapeHtml(group.title)} <span class="count">${group.items.length}</span></h3>
+          ${group.items.map(lead => taskRow(lead)).join("")}
+        </div>
+      `).join("");
 
       els.taskList.querySelectorAll(".task-row").forEach(row => {
         row.addEventListener("click", () => {
@@ -1274,6 +1808,72 @@
           setView("list");
         });
       });
+    }
+
+    function taskRow(lead) {
+      const status = lead.nextDate ? dateTone(lead.nextDate) : { label: "Sin fecha", tone: "neutral" };
+      const priority = findPriority(lead.priority);
+      const contact = [lead.phone, lead.email].filter(Boolean).join(" · ") || "Sin contacto";
+      const overdueClass = status.label === "Atrasada" ? "overdue" : "";
+      return `
+        <button class="task-row ${overdueClass}" type="button" data-id="${escapeAttr(lead.id)}">
+          <span>
+            <strong>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</strong>
+            <span>${escapeHtml(lead.nextAction || "Seguimiento")} · ${formatDate(lead.nextDate)} · ${escapeHtml(lead.platform || "-")}</span>
+            <span>${escapeHtml(contact)} · Prioridad ${escapeHtml(priority.label)}</span>
+          </span>
+          <span class="badge ${status.tone}">${escapeHtml(status.label)}</span>
+        </button>
+      `;
+    }
+
+    function renderPipeline(filtered) {
+      els.emptyPipeline.classList.toggle("active", filtered.length === 0);
+      els.pipelineGrid.innerHTML = stages.map(stage => {
+        const items = filtered.filter(lead => lead.stage === stage.id);
+        return `
+          <section class="pipeline-column">
+            <h3><span>${escapeHtml(stage.label)}</span><span class="count">${items.length}</span></h3>
+            ${items.map(lead => pipelineCard(lead)).join("")}
+          </section>
+        `;
+      }).join("");
+
+      els.pipelineGrid.querySelectorAll(".pipeline-card").forEach(card => {
+        card.addEventListener("click", event => {
+          if (event.target.matches("select")) return;
+          selectLead(card.dataset.id);
+        });
+        card.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectLead(card.dataset.id);
+          }
+        });
+      });
+
+      els.pipelineGrid.querySelectorAll("[data-pipeline-stage]").forEach(select => {
+        select.addEventListener("change", event => {
+          updateLeadStage(event.target.dataset.id, event.target.value);
+        });
+      });
+    }
+
+    function pipelineCard(lead) {
+      const priority = findPriority(lead.priority);
+      return `
+        <div class="pipeline-card" data-id="${escapeAttr(lead.id)}" tabindex="0">
+          <strong>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</strong>
+          <div class="pipeline-meta">
+            <span>${escapeHtml(lead.contact || "Sin contacto")} · ${escapeHtml(lead.platform || "-")}</span>
+            <span>${formatCurrency(Number(lead.potential || 0))} · ${escapeHtml(lead.nextAction || "Sin acción")}</span>
+            <span>${formatDate(lead.nextDate)} · Prioridad ${escapeHtml(priority.label)}</span>
+          </div>
+          <select data-pipeline-stage data-id="${escapeAttr(lead.id)}" aria-label="Cambiar estado">
+            ${stages.map(stage => `<option value="${escapeAttr(stage.id)}" ${lead.stage === stage.id ? "selected" : ""}>${escapeHtml(stage.label)}</option>`).join("")}
+          </select>
+        </div>
+      `;
     }
 
     function selectLead(id) {
@@ -1288,6 +1888,13 @@
         const input = document.getElementById(name);
         input.value = lead[name] ?? "";
       });
+      els.activityDate.value = today();
+      els.activityType.value = "Llamada";
+      els.activityNote.value = "";
+      els.activityNextDate.value = "";
+      els.activityNextAction.value = "";
+      renderActivityLog(lead.activityLog || []);
+      renderQuickActions(lead);
       updateDetailHeader(selectedId ? lead : null);
     }
 
@@ -1297,7 +1904,10 @@
         const input = document.getElementById(name);
         data[name] = input.value.trim();
       });
-      data.potential = Number(data.potential || 0);
+      data.potential = parseNumber(data.potential || 0);
+      data.estimatedTicket = parseNumber(data.estimatedTicket || 0);
+      data.estimatedMargin = parseNumber(data.estimatedMargin || 0);
+      data.closeProbability = parseNumber(data.closeProbability || 0);
       return data;
     }
 
@@ -1313,15 +1923,121 @@
       els.duplicateBtn.disabled = !lead;
     }
 
+    function renderQuickActions(lead) {
+      if (!selectedId || !lead) {
+        els.quickActions.innerHTML = "";
+        return;
+      }
+
+      const actionsHtml = [];
+      const phone = cleanPhone(lead.phone);
+      if (lead.phone) actionsHtml.push(`<a class="button" href="tel:${escapeAttr(phone)}">Llamar</a>`);
+      if (lead.email) actionsHtml.push(`<a class="button" href="mailto:${escapeAttr(lead.email)}">Email</a>`);
+      if (phone) actionsHtml.push(`<a class="button" target="_blank" rel="noopener" href="https://wa.me/${escapeAttr(phone)}">WhatsApp</a>`);
+      if (lead.email) actionsHtml.push(`<button class="button" type="button" data-copy="${escapeAttr(lead.email)}">Copiar email</button>`);
+      if (lead.phone) actionsHtml.push(`<button class="button" type="button" data-copy="${escapeAttr(lead.phone)}">Copiar teléfono</button>`);
+      if (lead.website) actionsHtml.push(`<a class="button" target="_blank" rel="noopener" href="${escapeAttr(normalizeWebsite(lead.website))}">Abrir web</a>`);
+
+      els.quickActions.innerHTML = actionsHtml.join("");
+      els.quickActions.querySelectorAll("[data-copy]").forEach(button => {
+        button.addEventListener("click", () => copyText(button.dataset.copy));
+      });
+    }
+
+    function renderActivityLog(activityLog) {
+      const sorted = [...(activityLog || [])].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+      els.activityList.innerHTML = sorted.length
+        ? sorted.map(activity => `
+          <article class="activity-item">
+            <strong>${escapeHtml(formatDate(activity.date))} · ${escapeHtml(activity.type || "Actividad")}</strong>
+            <p>${escapeHtml(activity.note || "Sin nota")}</p>
+            ${activity.nextAction || activity.nextDate ? `<p>Próximo: ${escapeHtml(activity.nextAction || "-")} · ${formatDate(activity.nextDate)}</p>` : ""}
+          </article>
+        `).join("")
+        : `<p class="summary-line">Sin actividad registrada todavía.</p>`;
+    }
+
+    function addActivityFromForm() {
+      const lead = getSelectedLead();
+      if (!lead) {
+        showToast("Guarda o selecciona una ficha antes de añadir actividad.");
+        return;
+      }
+
+      const activity = {
+        date: els.activityDate.value || today(),
+        type: els.activityType.value,
+        note: els.activityNote.value.trim(),
+        nextDate: els.activityNextDate.value,
+        nextAction: els.activityNextAction.value
+      };
+
+      if (!activity.note && !activity.nextDate && !activity.nextAction) {
+        showToast("Añade una nota o una próxima acción.");
+        return;
+      }
+
+      const updated = {
+        ...lead,
+        activityLog: addActivityEntry(lead.activityLog || [], activity),
+        lastContactDate: activity.date
+      };
+      if (activity.nextDate) updated.nextDate = activity.nextDate;
+      if (activity.nextAction) updated.nextAction = activity.nextAction;
+
+      leads = leads.map(item => item.id === updated.id ? updated : item);
+      saveLeads();
+      fillForm(updated);
+      render();
+      showToast("Actividad añadida.");
+    }
+
+    function updateLeadStage(id, stageId) {
+      const lead = leads.find(item => item.id === id);
+      if (!lead || lead.stage === stageId) return;
+      const updated = {
+        ...lead,
+        stage: stageId,
+        activityLog: addActivityEntry(lead.activityLog || [], {
+          type: "Cambio de estado",
+          note: `${findStage(lead.stage).label} → ${findStage(stageId).label}`
+        })
+      };
+      leads = leads.map(item => item.id === id ? updated : item);
+      if (selectedId === id) fillForm(updated);
+      saveLeads();
+      render();
+      showToast("Estado actualizado.");
+    }
+
+    function addActivityEntry(activityLog, activity) {
+      return [
+        {
+          id: createId(),
+          date: activity.date || today(),
+          type: activity.type || "Nota interna",
+          note: activity.note || "",
+          nextDate: activity.nextDate || "",
+          nextAction: activity.nextAction || ""
+        },
+        ...(activityLog || [])
+      ];
+    }
+
     function setView(view) {
       activeView = view;
       const isList = view === "list";
+      const isAgenda = view === "agenda";
+      const isPipeline = view === "pipeline";
       els.listViewBtn.classList.toggle("active", isList);
-      els.agendaViewBtn.classList.toggle("active", !isList);
+      els.agendaViewBtn.classList.toggle("active", isAgenda);
+      els.pipelineViewBtn.classList.toggle("active", isPipeline);
       els.listViewBtn.setAttribute("aria-selected", String(isList));
-      els.agendaViewBtn.setAttribute("aria-selected", String(!isList));
+      els.agendaViewBtn.setAttribute("aria-selected", String(isAgenda));
+      els.pipelineViewBtn.setAttribute("aria-selected", String(isPipeline));
       els.tableView.classList.toggle("hidden", !isList);
-      els.agendaView.classList.toggle("active", !isList);
+      els.agendaView.classList.toggle("active", isAgenda);
+      els.pipelineView.classList.toggle("active", isPipeline);
     }
 
     function getFilteredLeads() {
@@ -1329,10 +2045,24 @@
         if (filters.stage !== "all" && lead.stage !== filters.stage) return false;
         if (filters.platform !== "all" && lead.platform !== filters.platform) return false;
         if (!matchesDateFilter(lead, filters.date)) return false;
+        if (filters.priority !== "all" && lead.priority !== filters.priority) return false;
+        if (filters.customerType !== "all" && lead.customerType !== filters.customerType) return false;
+        if (filters.assignedSalesperson !== "all" && lead.assignedSalesperson !== filters.assignedSalesperson) return false;
+        if (filters.probability !== "all" && String(lead.closeProbability) !== String(filters.probability)) return false;
+        if (!matchesNextActionFilter(lead, filters.nextActionState)) return false;
         if (!filters.search) return true;
-        const haystack = fields.map(field => lead[field]).join(" ").toLowerCase();
+        const activityText = (lead.activityLog || []).map(item => `${item.type} ${item.note}`).join(" ");
+        const haystack = `${fields.map(field => lead[field]).join(" ")} ${activityText}`.toLowerCase();
         return haystack.includes(filters.search);
       });
+    }
+
+    function matchesNextActionFilter(lead, filter) {
+      if (filter === "all") return true;
+      if (filter === "with") return Boolean(lead.nextDate || lead.nextAction);
+      if (filter === "without") return !lead.nextDate && !lead.nextAction;
+      if (filter === "overdue") return Boolean(lead.nextDate && compareDates(lead.nextDate, today()) < 0);
+      return true;
     }
 
     function matchesDateFilter(lead, filter) {
@@ -1347,6 +2077,36 @@
 
     function countByDateFilter(filter) {
       return leads.filter(lead => matchesDateFilter(lead, filter)).length;
+    }
+
+    function defaultFilters() {
+      return {
+        stage: "all",
+        platform: "all",
+        date: "all",
+        search: "",
+        priority: "all",
+        customerType: "all",
+        assignedSalesperson: "all",
+        probability: "all",
+        nextActionState: "all"
+      };
+    }
+
+    function syncFilterControls() {
+      els.priorityFilter.value = filters.priority;
+      els.customerTypeFilter.value = filters.customerType;
+      els.salespersonFilter.value = filters.assignedSalesperson;
+      els.probabilityFilter.value = filters.probability;
+      els.nextActionFilter.value = filters.nextActionState;
+    }
+
+    function updateSalespersonFilter() {
+      const current = els.salespersonFilter.value || filters.assignedSalesperson;
+      const salespeople = [...new Set(leads.map(lead => lead.assignedSalesperson).filter(Boolean))].sort();
+      setOptions(els.salespersonFilter, [{ value: "all", label: "Todos" }, ...salespeople.map(value => ({ value, label: value }))]);
+      els.salespersonFilter.value = salespeople.includes(current) ? current : "all";
+      filters.assignedSalesperson = els.salespersonFilter.value;
     }
 
     function isDueTodayOrEarlier(lead) {
@@ -1367,6 +2127,19 @@
       return { label: formatDate(dateString), tone: "neutral" };
     }
 
+    function weightedValue(lead) {
+      return Number(lead.potential || 0) * (Number(lead.closeProbability || 0) / 100);
+    }
+
+    function isWonThisMonth(lead) {
+      if (lead.stage !== "convertido") return false;
+      const dates = (lead.activityLog || [])
+        .filter(activity => activity.type === "Cambio de estado" && String(activity.note || "").includes("Convertido"))
+        .map(activity => activity.date);
+      const reference = dates[0] || lead.lastContactDate || lead.nextDate || "";
+      return reference.startsWith(today().slice(0, 7));
+    }
+
     function getSelectedLead() {
       return leads.find(lead => lead.id === selectedId) || null;
     }
@@ -1379,28 +2152,58 @@
         position: "",
         phone: "",
         email: "",
+        cif: "",
+        website: "",
+        city: "",
+        province: "",
+        customerType: "Empresa",
         platform: "Amazon",
         orderRef: "",
         lastPurchase: "",
         potential: 0,
+        interestProduct: "",
+        estimatedTicket: 0,
+        estimatedMargin: 0,
+        closeProbability: 50,
         stage: "nuevo",
         priority: "media",
         nextDate: today(),
+        lastContactDate: "",
         nextAction: "Llamar",
+        assignedSalesperson: "",
+        lossReason: "",
         products: "",
-        notes: ""
+        notes: "",
+        activityLog: []
       };
     }
 
     function loadLeads() {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return demoLeads;
+        if (!saved) return migrateLegacyLeads();
         const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) ? parsed : demoLeads;
+        return Array.isArray(parsed) ? parsed.map(normalizeLead) : demoLeads;
       } catch {
-        return demoLeads;
+        return migrateLegacyLeads();
       }
+    }
+
+    function migrateLegacyLeads() {
+      for (const key of LEGACY_STORAGE_KEYS) {
+        try {
+          const saved = localStorage.getItem(key);
+          if (!saved) continue;
+          const parsed = JSON.parse(saved);
+          if (!Array.isArray(parsed)) continue;
+          const migrated = parsed.map(normalizeLead);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+          return migrated;
+        } catch {
+          continue;
+        }
+      }
+      return demoLeads;
     }
 
     function saveLeads() {
@@ -1419,9 +2222,10 @@
       leads = [];
       selectedId = null;
       localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem("directo-crm-v1");
-      filters = { stage: "all", platform: "all", date: "all", search: "" };
+      LEGACY_STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
+      filters = defaultFilters();
       els.searchInput.value = "";
+      syncFilterControls();
       render();
       fillForm(blankLead());
       showToast("Todos los datos se han borrado.");
@@ -1439,12 +2243,17 @@
             showToast("No se encontraron fichas para importar.");
             return;
           }
-          leads = mergeLeads(leads, imported);
+          const mode = els.importMode.value;
+          const message = mode === "replace"
+            ? `Se reemplazarán todos los datos actuales por ${imported.length} registros importados. ¿Continuar?`
+            : `Se fusionarán ${imported.length} registros con los datos actuales. ¿Continuar?`;
+          if (!confirm(message)) return;
+          leads = mode === "replace" ? imported : mergeLeads(leads, imported);
           selectedId = leads[0]?.id || null;
           saveLeads();
           render();
           fillForm(getSelectedLead() || blankLead());
-          showToast(`${imported.length} fichas importadas.`);
+          showToast(mode === "replace" ? `${imported.length} fichas restauradas.` : `${imported.length} fichas fusionadas.`);
         } catch (error) {
           showToast("No se pudo importar el archivo.");
         } finally {
@@ -1463,7 +2272,7 @@
 
     function fromCsv(text) {
       const rows = parseCsv(text);
-      const headerIndex = rows.findIndex(row => row.some(cell => String(cell || "").trim()));
+      const headerIndex = findHeaderRowIndex(rows);
       if (headerIndex < 0 || rows.length <= headerIndex + 1) return [];
       const headers = rows[headerIndex].map(header => csvHeaderToKey(header.trim()));
       return rows.slice(headerIndex + 1).filter(row => row.some(cell => String(cell || "").trim())).map(row => {
@@ -1475,11 +2284,24 @@
       });
     }
 
+    function findHeaderRowIndex(rows) {
+      let best = -1;
+      let bestScore = 0;
+      rows.slice(0, 20).forEach((row, index) => {
+        const score = row.reduce((sum, cell) => sum + (csvHeaderToKey(String(cell || "").trim()) ? 1 : 0), 0);
+        if (score > bestScore) {
+          best = index;
+          bestScore = score;
+        }
+      });
+      return bestScore > 0 ? best : -1;
+    }
+
     function csvHeaderToKey(header) {
       if (["id", ...fields].includes(header)) return header;
       const normalized = normalizeHeader(header);
       const found = exportColumns.find(column => normalizeHeader(column.label) === normalized);
-      return found?.key || "";
+      return found?.key || headerAliases[normalized] || "";
     }
 
     function normalizeLead(raw) {
@@ -1488,22 +2310,44 @@
         if (raw[field] !== undefined) lead[field] = raw[field];
       });
       lead.id = raw.id || createId();
+      if (!lead.company) lead.company = lead.contact || lead.email || lead.phone || "Sin empresa";
       lead.platform = normalizeOption(lead.platform, platforms, "Marketplace otro");
       lead.stage = normalizeOption(lead.stage, stages.map(stage => stage.id), "");
       if (!lead.stage) lead.stage = normalizeLabeledOption(raw.stage, stages, "nuevo");
+      if (["perdido", "no interesa", "perdido no interesa"].includes(normalizeHeader(raw.stage))) lead.stage = "no_interesa";
       lead.priority = normalizeOption(lead.priority, priorities.map(priority => priority.id), "");
       if (!lead.priority) lead.priority = normalizeLabeledOption(raw.priority, priorities, "media");
       lead.nextAction = normalizeOption(lead.nextAction, actions, "Llamar");
+      lead.customerType = normalizeOption(lead.customerType, customerTypes, "Empresa");
       lead.potential = parseNumber(raw.potential || 0);
+      lead.estimatedTicket = parseNumber(raw.estimatedTicket || 0);
+      lead.estimatedMargin = parseNumber(raw.estimatedMargin || 0);
+      lead.closeProbability = closeProbabilities.includes(parseNumber(raw.closeProbability)) ? parseNumber(raw.closeProbability) : 50;
       lead.lastPurchase = normalizeDate(lead.lastPurchase);
       lead.nextDate = normalizeDate(lead.nextDate);
+      lead.lastContactDate = normalizeDate(lead.lastContactDate);
+      lead.website = normalizeWebsite(lead.website);
+      lead.activityLog = Array.isArray(raw.activityLog) ? raw.activityLog.map(normalizeActivity).filter(Boolean) : [];
       return lead;
     }
 
     function mergeLeads(existing, imported) {
-      const byId = new Map(existing.map(lead => [lead.id, lead]));
-      imported.forEach(lead => byId.set(lead.id, lead));
-      return Array.from(byId.values());
+      const merged = [...existing];
+      imported.forEach(lead => {
+        const index = merged.findIndex(item => mergeKey(item) === mergeKey(lead));
+        if (index >= 0) {
+          merged[index] = { ...merged[index], ...lead, id: merged[index].id, activityLog: [...(lead.activityLog || []), ...(merged[index].activityLog || [])] };
+        } else {
+          merged.push(lead);
+        }
+      });
+      return merged;
+    }
+
+    function mergeKey(lead) {
+      if (lead.email) return `email:${normalizeHeader(lead.email)}`;
+      if (lead.company || lead.phone) return `lead:${normalizeHeader(lead.company)}:${cleanPhone(lead.phone)}`;
+      return `id:${lead.id}`;
     }
 
     function toCsv(items) {
@@ -1561,14 +2405,15 @@
 
     function excelCell(item, key) {
       const value = exportDisplayValue(item, key);
-      const className = key === "potential" ? "number" : key.includes("Date") || key === "lastPurchase" ? "date" : "";
+      const numberFields = ["potential", "estimatedTicket", "estimatedMargin", "closeProbability"];
+      const className = numberFields.includes(key) ? "number" : key.includes("Date") || key === "lastPurchase" ? "date" : "";
       return `<td class="${className}">${escapeHtml(value)}</td>`;
     }
 
     function exportDisplayValue(item, key) {
       if (key === "stage") return findStage(item.stage).label;
       if (key === "priority") return findPriority(item.priority).label;
-      if (key === "lastPurchase" || key === "nextDate") return formatDate(item[key]);
+      if (key === "lastPurchase" || key === "nextDate" || key === "lastContactDate") return formatDate(item[key]);
       return item[key] ?? "";
     }
 
@@ -1624,6 +2469,38 @@
       }
 
       return text;
+    }
+
+    function normalizeWebsite(value) {
+      const text = String(value ?? "").trim();
+      if (!text) return "";
+      if (/^https?:\/\//i.test(text)) return text;
+      return `https://${text}`;
+    }
+
+    function normalizeActivity(activity) {
+      if (!activity || typeof activity !== "object") return null;
+      return {
+        id: activity.id || createId(),
+        date: normalizeDate(activity.date) || today(),
+        type: activityTypes.includes(activity.type) ? activity.type : "Nota interna",
+        note: activity.note || "",
+        nextDate: normalizeDate(activity.nextDate),
+        nextAction: activity.nextAction || ""
+      };
+    }
+
+    function cleanPhone(value) {
+      return String(value || "").replace(/[^\d+]/g, "").replace(/^00/, "+");
+    }
+
+    async function copyText(value) {
+      try {
+        await navigator.clipboard.writeText(value);
+        showToast("Copiado al portapapeles.");
+      } catch {
+        showToast("No se pudo copiar automáticamente.");
+      }
     }
 
     function normalizeHeader(value) {

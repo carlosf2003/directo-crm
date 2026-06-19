@@ -2,6 +2,10 @@
 
 Mini CRM para llevar seguimiento de clientes que compran por marketplaces y convertirlos a compra directa.
 
+## Aviso de datos
+
+Los datos se guardan en el navegador de cada equipo mediante localStorage. Haz copias de seguridad periódicas. Para datos sensibles, varios usuarios o control de acceso real, se recomienda una versión con login y base de datos.
+
 ## Uso online
 
 Abre la URL pública de GitHub Pages:
@@ -34,6 +38,15 @@ Para mover datos o hacer copia de seguridad:
 La `X` del listado solo limpia filtros; no borra clientes.
 
 El importador acepta CSV separado por comas o por punto y coma, y salta filas vacías antes de los encabezados.
+
+## Funciones principales
+
+- Listado, agenda y pipeline Kanban.
+- Historial de actividad por cliente.
+- Acciones rápidas: llamar, email, WhatsApp, copiar datos y abrir web.
+- Campos comerciales ampliados: CIF, web, ciudad, provincia, tipo, ticket, margen, probabilidad, comercial y motivo de pérdida.
+- KPIs comerciales, valor ponderado, valor por estado y top clientes.
+- Importación flexible de CSV de marketplaces.
 
 ## Canales incluidos
 
