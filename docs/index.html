@@ -1138,7 +1138,7 @@
             </div>
             <div class="field">
               <label for="website">Web empresa</label>
-              <input id="website" name="website" type="url" placeholder="https://">
+              <input id="website" name="website" inputmode="url" placeholder="https://">
             </div>
             <div class="field">
               <label for="city">Ciudad</label>
@@ -1335,8 +1335,8 @@
 
     const demoLeads = [];
 
-    let leads = loadLeads();
-    let selectedId = leads[0]?.id || null;
+    let leads = [];
+    let selectedId = null;
     let filters = defaultFilters();
     let activeView = "list";
 
@@ -1505,6 +1505,9 @@
       provincia: "province",
       comercial: "assignedSalesperson"
     };
+
+    leads = loadLeads();
+    selectedId = leads[0]?.id || null;
 
     init();
 
