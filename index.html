@@ -209,6 +209,13 @@
       background: transparent;
     }
 
+    .button.tiny {
+      min-height: 28px;
+      padding: 0 8px;
+      font-size: 12px;
+      gap: 5px;
+    }
+
     .icon-btn {
       width: 38px;
       padding: 0;
@@ -260,7 +267,7 @@
 
     .dashboard {
       display: grid;
-      grid-template-columns: minmax(240px, 1fr) minmax(240px, 1fr);
+      grid-template-columns: repeat(4, minmax(220px, 1fr));
       gap: 10px;
       margin: 14px 18px 0;
     }
@@ -297,6 +304,11 @@
     .summary-line strong {
       color: var(--text);
       text-align: right;
+    }
+
+    .summary-line.hot {
+      color: var(--accent-dark);
+      font-weight: 700;
     }
 
     .main {
@@ -432,7 +444,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 950px;
+      min-width: 1240px;
     }
 
     th,
@@ -468,6 +480,10 @@
 
     tbody tr.selected {
       background: var(--accent-soft);
+    }
+
+    tbody tr.hot-lead {
+      background: #f7fcf9;
     }
 
     .company-cell {
@@ -521,6 +537,48 @@
     .badge.danger {
       background: var(--danger-soft);
       color: var(--danger);
+    }
+
+    .score-chip {
+      border: 1px solid transparent;
+    }
+
+    .score-chip.alto {
+      background: var(--ok-soft);
+      color: var(--ok);
+      border-color: #b7dfc2;
+    }
+
+    .score-chip.medio {
+      background: var(--warn-soft);
+      color: var(--warn);
+      border-color: #f3d3a8;
+    }
+
+    .score-chip.bajo {
+      background: #eef1ee;
+      color: #49534d;
+      border-color: var(--line);
+    }
+
+    .activity-temperature {
+      display: grid;
+      gap: 3px;
+      min-width: 110px;
+    }
+
+    .activity-temperature small {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .row-actions,
+    .task-actions,
+    .pipeline-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
     }
 
     .date-cell {
@@ -582,12 +640,16 @@
 
     .pipeline-column h3 {
       margin: 0;
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
+      display: grid;
+      gap: 3px;
       font-size: 13px;
       color: var(--muted);
       text-transform: uppercase;
+    }
+
+    .pipeline-column h3 strong {
+      color: var(--text);
+      font-size: 13px;
     }
 
     .pipeline-card {
@@ -604,6 +666,11 @@
 
     .pipeline-card:hover {
       border-color: var(--accent);
+    }
+
+    .pipeline-card.hot-lead {
+      border-color: #b7dfc2;
+      background: #f7fcf9;
     }
 
     .pipeline-card strong {
@@ -648,7 +715,7 @@
 
     .task-row {
       display: grid;
-      grid-template-columns: minmax(120px, 1fr) auto;
+      grid-template-columns: minmax(160px, 1fr) auto;
       gap: 10px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -667,6 +734,10 @@
       color: var(--muted);
       font-size: 12px;
       line-height: 1.45;
+    }
+
+    .task-row .task-actions span {
+      display: inline;
     }
 
     .detail {
@@ -837,6 +908,46 @@
       line-height: 1.45;
     }
 
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(23, 33, 27, 0.38);
+    }
+
+    .modal-backdrop.active {
+      display: grid;
+    }
+
+    .modal {
+      width: min(560px, 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .modal h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .print-report {
+      display: none;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -953,6 +1064,53 @@
       .activity-form {
         grid-template-columns: 1fr;
       }
+
+      .modal-actions,
+      .row-actions,
+      .task-actions,
+      .pipeline-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+    }
+
+    @media print {
+      body > .app,
+      body > .toast,
+      body > .modal-backdrop {
+        display: none !important;
+      }
+
+      .print-report {
+        display: block;
+        padding: 24px;
+        color: #17211b;
+        font-family: Arial, sans-serif;
+      }
+
+      .print-report h1 {
+        margin: 0 0 4px;
+        font-size: 26px;
+      }
+
+      .print-report h2 {
+        margin: 22px 0 8px;
+        font-size: 16px;
+      }
+
+      .print-report table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+      }
+
+      .print-report th,
+      .print-report td {
+        border: 1px solid #cfd8d3;
+        padding: 7px;
+        font-size: 11px;
+      }
     }
   </style>
 </head>
@@ -974,9 +1132,12 @@
 
       <div class="toolbar" aria-label="Acciones">
         <button class="button primary" id="newLeadBtn" type="button"><span aria-hidden="true">+</span> Nuevo cliente</button>
+        <button class="button" id="demoDataBtn" type="button" title="Añadir clientes ficticios para enseñar el CRM"><span aria-hidden="true">★</span> Datos demo</button>
         <button class="button" id="exportJsonBtn" type="button" title="Copia de seguridad JSON"><span aria-hidden="true">⇩</span> Copia JSON</button>
         <button class="button" id="exportExcelBtn" type="button" title="Exportar Excel"><span aria-hidden="true">⇩</span> Excel</button>
         <button class="button" id="exportCsvBtn" type="button" title="Exportar CSV"><span aria-hidden="true">⇩</span> CSV</button>
+        <button class="button" id="exportFollowupBtn" type="button" title="Exportar CSV de seguimiento comercial"><span aria-hidden="true">⇩</span> Seguimiento</button>
+        <button class="button" id="printReportBtn" type="button" title="Imprimir resumen comercial"><span aria-hidden="true">▦</span> Informe</button>
         <select id="importMode" title="Modo de importación">
           <option value="merge">Fusionar</option>
           <option value="replace">Reemplazar</option>
@@ -1013,6 +1174,14 @@
       <div class="summary-panel">
         <h2>Top 5 por potencial</h2>
         <div class="summary-list" id="topPotentialList"></div>
+      </div>
+      <div class="summary-panel">
+        <h2>Clientes calientes</h2>
+        <div class="summary-list" id="hotLeadsList"></div>
+      </div>
+      <div class="summary-panel">
+        <h2>Top 5 por score</h2>
+        <div class="summary-list" id="topScoreList"></div>
       </div>
     </section>
 
@@ -1051,6 +1220,17 @@
               <option value="overdue">Atrasadas</option>
             </select>
           </div>
+          <div class="field">
+            <label for="sortControl">Ordenar por</label>
+            <select id="sortControl">
+              <option value="score">Score</option>
+              <option value="potential">Potencial anual</option>
+              <option value="nextDate">Próxima fecha</option>
+              <option value="lastActivity">Última actividad</option>
+              <option value="probability">Probabilidad</option>
+              <option value="priority">Prioridad</option>
+            </select>
+          </div>
         </div>
       </aside>
 
@@ -1078,7 +1258,10 @@
                 <th>Fecha</th>
                 <th>Prioridad</th>
                 <th>Prob.</th>
+                <th>Score</th>
+                <th>Última actividad</th>
                 <th>Potencial</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody id="leadRows"></tbody>
@@ -1260,6 +1443,40 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <div class="modal-backdrop" id="quickActivityModal" aria-hidden="true">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="quickActivityTitle">
+      <h2 id="quickActivityTitle">Añadir actividad</h2>
+      <div class="field-grid">
+        <div class="field">
+          <label for="quickActivityDate">Fecha</label>
+          <input id="quickActivityDate" type="date">
+        </div>
+        <div class="field">
+          <label for="quickActivityType">Tipo</label>
+          <select id="quickActivityType"></select>
+        </div>
+        <div class="field">
+          <label for="quickActivityNextAction">Próxima acción</label>
+          <select id="quickActivityNextAction"></select>
+        </div>
+        <div class="field">
+          <label for="quickActivityNextDate">Próxima fecha</label>
+          <input id="quickActivityNextDate" type="date">
+        </div>
+        <div class="field full">
+          <label for="quickActivityNote">Nota</label>
+          <textarea id="quickActivityNote" placeholder="Resumen breve de la llamada, email o seguimiento..."></textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="button ghost" id="quickActivityCancelBtn" type="button">Cancelar</button>
+        <button class="button primary" id="quickActivitySaveBtn" type="button">Guardar actividad</button>
+      </div>
+    </section>
+  </div>
+
+  <section class="print-report" id="printReport" aria-label="Informe imprimible"></section>
+
   <script>
     const STORAGE_KEY = "directo-crm-v3";
     const LEGACY_STORAGE_KEYS = ["directo-crm-v2", "directo-crm-v1"];
@@ -1319,6 +1536,7 @@
       "WhatsApp",
       "Presupuesto enviado",
       "Seguimiento",
+      "Seguimiento realizado",
       "Nota interna",
       "Compra",
       "Cambio de estado",
@@ -1339,13 +1557,17 @@
     let selectedId = null;
     let filters = defaultFilters();
     let activeView = "list";
+    let quickActivityLeadId = null;
 
     const els = {
       searchInput: document.getElementById("searchInput"),
       newLeadBtn: document.getElementById("newLeadBtn"),
+      demoDataBtn: document.getElementById("demoDataBtn"),
       exportJsonBtn: document.getElementById("exportJsonBtn"),
       exportExcelBtn: document.getElementById("exportExcelBtn"),
       exportCsvBtn: document.getElementById("exportCsvBtn"),
+      exportFollowupBtn: document.getElementById("exportFollowupBtn"),
+      printReportBtn: document.getElementById("printReportBtn"),
       importBtn: document.getElementById("importBtn"),
       importMode: document.getElementById("importMode"),
       clearDataBtn: document.getElementById("clearDataBtn"),
@@ -1363,6 +1585,8 @@
       kpiConversion: document.getElementById("kpiConversion"),
       stageValueList: document.getElementById("stageValueList"),
       topPotentialList: document.getElementById("topPotentialList"),
+      hotLeadsList: document.getElementById("hotLeadsList"),
+      topScoreList: document.getElementById("topScoreList"),
       stageFilters: document.getElementById("stageFilters"),
       platformFilters: document.getElementById("platformFilters"),
       dateFilters: document.getElementById("dateFilters"),
@@ -1371,6 +1595,7 @@
       salespersonFilter: document.getElementById("salespersonFilter"),
       probabilityFilter: document.getElementById("probabilityFilter"),
       nextActionFilter: document.getElementById("nextActionFilter"),
+      sortControl: document.getElementById("sortControl"),
       leadRows: document.getElementById("leadRows"),
       emptyState: document.getElementById("emptyState"),
       resultCount: document.getElementById("resultCount"),
@@ -1399,6 +1624,16 @@
       activityNextDate: document.getElementById("activityNextDate"),
       activityNextAction: document.getElementById("activityNextAction"),
       activityList: document.getElementById("activityList"),
+      quickActivityModal: document.getElementById("quickActivityModal"),
+      quickActivityTitle: document.getElementById("quickActivityTitle"),
+      quickActivityDate: document.getElementById("quickActivityDate"),
+      quickActivityType: document.getElementById("quickActivityType"),
+      quickActivityNote: document.getElementById("quickActivityNote"),
+      quickActivityNextDate: document.getElementById("quickActivityNextDate"),
+      quickActivityNextAction: document.getElementById("quickActivityNextAction"),
+      quickActivityCancelBtn: document.getElementById("quickActivityCancelBtn"),
+      quickActivitySaveBtn: document.getElementById("quickActivitySaveBtn"),
+      printReport: document.getElementById("printReport"),
       toast: document.getElementById("toast")
     };
 
@@ -1528,6 +1763,8 @@
       setOptions(document.getElementById("closeProbability"), closeProbabilities.map(value => ({ value: String(value), label: `${value}%` })));
       setOptions(document.getElementById("activityType"), activityTypes.map(value => ({ value, label: value })));
       setOptions(document.getElementById("activityNextAction"), [{ value: "", label: "No cambiar" }, ...actions.map(value => ({ value, label: value }))]);
+      setOptions(els.quickActivityType, activityTypes.map(value => ({ value, label: value })));
+      setOptions(els.quickActivityNextAction, [{ value: "", label: "No cambiar" }, ...actions.map(value => ({ value, label: value }))]);
       setOptions(els.priorityFilter, [{ value: "all", label: "Todas" }, ...priorities.map(priority => ({ value: priority.id, label: priority.label }))]);
       setOptions(els.customerTypeFilter, [{ value: "all", label: "Todos" }, ...customerTypes.map(value => ({ value, label: value }))]);
       setOptions(els.probabilityFilter, [{ value: "all", label: "Todas" }, ...closeProbabilities.map(value => ({ value: String(value), label: `${value}%` }))]);
@@ -1550,6 +1787,8 @@
         updateDetailHeader(null);
         document.getElementById("company").focus();
       });
+
+      els.demoDataBtn.addEventListener("click", loadDemoData);
 
       els.resetBtn.addEventListener("click", () => {
         selectedId = null;
@@ -1637,13 +1876,14 @@
       els.agendaViewBtn.addEventListener("click", () => setView("agenda"));
       els.pipelineViewBtn.addEventListener("click", () => setView("pipeline"));
 
-      [els.priorityFilter, els.customerTypeFilter, els.salespersonFilter, els.probabilityFilter, els.nextActionFilter].forEach(select => {
+      [els.priorityFilter, els.customerTypeFilter, els.salespersonFilter, els.probabilityFilter, els.nextActionFilter, els.sortControl].forEach(select => {
         select.addEventListener("change", () => {
           filters.priority = els.priorityFilter.value;
           filters.customerType = els.customerTypeFilter.value;
           filters.assignedSalesperson = els.salespersonFilter.value;
           filters.probability = els.probabilityFilter.value;
           filters.nextActionState = els.nextActionFilter.value;
+          filters.sort = els.sortControl.value;
           render();
         });
       });
@@ -1663,10 +1903,22 @@
         showToast("CSV exportado.");
       });
 
+      els.exportFollowupBtn.addEventListener("click", () => {
+        downloadFile(`directo-crm-seguimiento-${today()}.csv`, toFollowupCsv(leads), "text/csv;charset=utf-8");
+        showToast("Seguimiento exportado.");
+      });
+
+      els.printReportBtn.addEventListener("click", printCommercialReport);
+
       els.importBtn.addEventListener("click", () => els.importFile.click());
       els.importFile.addEventListener("change", importFile);
       els.clearDataBtn.addEventListener("click", clearAllData);
       els.addActivityBtn.addEventListener("click", addActivityFromForm);
+      els.quickActivityCancelBtn.addEventListener("click", closeQuickActivityModal);
+      els.quickActivityModal.addEventListener("click", event => {
+        if (event.target === els.quickActivityModal) closeQuickActivityModal();
+      });
+      els.quickActivitySaveBtn.addEventListener("click", saveQuickActivity);
     }
 
     function render() {
@@ -1711,6 +1963,16 @@
       els.topPotentialList.innerHTML = top.length
         ? top.map(lead => `<div class="summary-line"><span>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</span><strong>${formatCurrency(Number(lead.potential || 0))}</strong></div>`).join("")
         : `<div class="summary-line"><span>Sin datos todavía</span><strong>0 €</strong></div>`;
+
+      const hot = getHotLeads().slice(0, 5);
+      els.hotLeadsList.innerHTML = hot.length
+        ? hot.map(lead => `<div class="summary-line hot"><span>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</span><strong>${leadScore(lead)} pts</strong></div>`).join("")
+        : `<div class="summary-line"><span>Sin clientes calientes</span><strong>0</strong></div>`;
+
+      const topScore = [...leads].sort((a, b) => leadScore(b) - leadScore(a)).slice(0, 5);
+      els.topScoreList.innerHTML = topScore.length
+        ? topScore.map(lead => `<div class="summary-line"><span>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</span><strong>${leadScore(lead)} pts</strong></div>`).join("")
+        : `<div class="summary-line"><span>Sin datos todavía</span><strong>0</strong></div>`;
     }
 
     function renderFilters() {
@@ -1755,8 +2017,11 @@
       els.leadRows.innerHTML = filtered.map(lead => {
         const stage = findStage(lead.stage);
         const priority = findPriority(lead.priority);
+        const score = leadScore(lead);
+        const scoreMeta = leadScoreMeta(score);
+        const activityMeta = lastActivityMeta(lead);
         return `
-          <tr class="${lead.id === selectedId ? "selected" : ""}" data-id="${escapeAttr(lead.id)}" tabindex="0">
+          <tr class="${lead.id === selectedId ? "selected" : ""} ${isHotLead(lead) ? "hot-lead" : ""}" data-id="${escapeAttr(lead.id)}" tabindex="0">
             <td>
               <div class="company-cell">
                 <strong>${escapeHtml(lead.company || "Sin empresa")}</strong>
@@ -1769,18 +2034,42 @@
             <td class="date-cell">${formatDate(lead.nextDate)}</td>
             <td><span class="badge ${priority.tone}">${escapeHtml(priority.label)}</span></td>
             <td class="date-cell">${Number(lead.closeProbability || 0)}%</td>
+            <td><span class="badge score-chip ${scoreMeta.tone}">${score} · ${escapeHtml(scoreMeta.label)}</span></td>
+            <td>
+              <div class="activity-temperature">
+                <span class="badge ${activityMeta.tone}">${escapeHtml(activityMeta.temperature)}</span>
+                <small>${escapeHtml(activityMeta.label)}</small>
+              </div>
+            </td>
             <td class="date-cell">${formatCurrency(Number(lead.potential || 0))}</td>
+            <td>
+              <div class="row-actions">
+                <button class="button tiny" type="button" data-action="activity" data-id="${escapeAttr(lead.id)}">+ Actividad</button>
+                ${lead.email ? `<a class="button tiny" target="_blank" rel="noopener" href="${escapeAttr(outlookComposeUrl(lead))}" data-action-link>Outlook</a>` : ""}
+                ${lead.phone ? `<a class="button tiny" target="_blank" rel="noopener" href="https://wa.me/${escapeAttr(cleanPhone(lead.phone))}" data-action-link>WhatsApp</a>` : ""}
+              </div>
+            </td>
           </tr>
         `;
       }).join("");
 
       els.leadRows.querySelectorAll("tr").forEach(row => {
-        row.addEventListener("click", () => selectLead(row.dataset.id));
+        row.addEventListener("click", event => {
+          if (event.target.closest("button, a, select")) return;
+          selectLead(row.dataset.id);
+        });
         row.addEventListener("keydown", event => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             selectLead(row.dataset.id);
           }
+        });
+      });
+
+      els.leadRows.querySelectorAll("[data-action='activity']").forEach(button => {
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          openQuickActivityModal(button.dataset.id);
         });
       });
     }
@@ -1806,9 +2095,17 @@
       `).join("");
 
       els.taskList.querySelectorAll(".task-row").forEach(row => {
-        row.addEventListener("click", () => {
+        row.addEventListener("click", event => {
+          if (event.target.closest("button, a")) return;
           selectLead(row.dataset.id);
           setView("list");
+        });
+      });
+
+      els.taskList.querySelectorAll("[data-task-action]").forEach(button => {
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          handleTaskAction(button.dataset.taskAction, button.dataset.id);
         });
       });
     }
@@ -1819,14 +2116,24 @@
       const contact = [lead.phone, lead.email].filter(Boolean).join(" · ") || "Sin contacto";
       const overdueClass = status.label === "Atrasada" ? "overdue" : "";
       return `
-        <button class="task-row ${overdueClass}" type="button" data-id="${escapeAttr(lead.id)}">
+        <article class="task-row ${overdueClass}" data-id="${escapeAttr(lead.id)}" tabindex="0">
           <span>
             <strong>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</strong>
             <span>${escapeHtml(lead.nextAction || "Seguimiento")} · ${formatDate(lead.nextDate)} · ${escapeHtml(lead.platform || "-")}</span>
             <span>${escapeHtml(contact)} · Prioridad ${escapeHtml(priority.label)}</span>
           </span>
-          <span class="badge ${status.tone}">${escapeHtml(status.label)}</span>
-        </button>
+          <span>
+            <span class="badge ${status.tone}">${escapeHtml(status.label)}</span>
+            <span class="task-actions">
+              <button class="button tiny" type="button" data-task-action="done" data-id="${escapeAttr(lead.id)}">Realizada</button>
+              <button class="button tiny" type="button" data-task-action="postpone1" data-id="${escapeAttr(lead.id)}">+1 día</button>
+              <button class="button tiny" type="button" data-task-action="postpone7" data-id="${escapeAttr(lead.id)}">+7 días</button>
+              <button class="button tiny" type="button" data-task-action="activity" data-id="${escapeAttr(lead.id)}">+ Actividad</button>
+              ${lead.email ? `<a class="button tiny" target="_blank" rel="noopener" href="${escapeAttr(outlookComposeUrl(lead))}" data-action-link>Outlook</a>` : ""}
+              ${lead.phone ? `<a class="button tiny" target="_blank" rel="noopener" href="https://wa.me/${escapeAttr(cleanPhone(lead.phone))}" data-action-link>WhatsApp</a>` : ""}
+            </span>
+          </span>
+        </article>
       `;
     }
 
@@ -1834,9 +2141,13 @@
       els.emptyPipeline.classList.toggle("active", filtered.length === 0);
       els.pipelineGrid.innerHTML = stages.map(stage => {
         const items = filtered.filter(lead => lead.stage === stage.id);
+        const total = items.reduce((sum, lead) => sum + Number(lead.potential || 0), 0);
         return `
           <section class="pipeline-column">
-            <h3><span>${escapeHtml(stage.label)}</span><span class="count">${items.length}</span></h3>
+            <h3>
+              <strong>${escapeHtml(stage.label)}</strong>
+              <span>${items.length} ${items.length === 1 ? "cliente" : "clientes"} · ${formatCurrency(total)}</span>
+            </h3>
             ${items.map(lead => pipelineCard(lead)).join("")}
           </section>
         `;
@@ -1844,7 +2155,7 @@
 
       els.pipelineGrid.querySelectorAll(".pipeline-card").forEach(card => {
         card.addEventListener("click", event => {
-          if (event.target.matches("select")) return;
+          if (event.target.closest("button, a, select")) return;
           selectLead(card.dataset.id);
         });
         card.addEventListener("keydown", event => {
@@ -1860,21 +2171,46 @@
           updateLeadStage(event.target.dataset.id, event.target.value);
         });
       });
+
+      els.pipelineGrid.querySelectorAll("[data-pipeline-action]").forEach(button => {
+        button.addEventListener("click", event => {
+          event.stopPropagation();
+          const id = button.dataset.id;
+          if (button.dataset.pipelineAction === "view") {
+            selectLead(id);
+            setView("list");
+          } else if (button.dataset.pipelineAction === "activity") {
+            openQuickActivityModal(id);
+          }
+        });
+      });
     }
 
     function pipelineCard(lead) {
       const priority = findPriority(lead.priority);
+      const score = leadScore(lead);
+      const scoreMeta = leadScoreMeta(score);
+      const activityMeta = lastActivityMeta(lead);
       return `
-        <div class="pipeline-card" data-id="${escapeAttr(lead.id)}" tabindex="0">
+        <div class="pipeline-card ${isHotLead(lead) ? "hot-lead" : ""}" data-id="${escapeAttr(lead.id)}" tabindex="0">
           <strong>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</strong>
           <div class="pipeline-meta">
             <span>${escapeHtml(lead.contact || "Sin contacto")} · ${escapeHtml(lead.platform || "-")}</span>
-            <span>${formatCurrency(Number(lead.potential || 0))} · ${escapeHtml(lead.nextAction || "Sin acción")}</span>
-            <span>${formatDate(lead.nextDate)} · Prioridad ${escapeHtml(priority.label)}</span>
+            <span>Estado ${escapeHtml(findStage(lead.stage).label)} · Prioridad ${escapeHtml(priority.label)}</span>
+            <span>${formatCurrency(Number(lead.potential || 0))} · Prob. ${Number(lead.closeProbability || 0)}%</span>
+            <span>Score <span class="badge score-chip ${scoreMeta.tone}">${score} · ${escapeHtml(scoreMeta.label)}</span></span>
+            <span>${escapeHtml(lead.nextAction || "Sin acción")} · ${formatDate(lead.nextDate)}</span>
+            <span>Última actividad: ${escapeHtml(activityMeta.label)}</span>
           </div>
           <select data-pipeline-stage data-id="${escapeAttr(lead.id)}" aria-label="Cambiar estado">
             ${stages.map(stage => `<option value="${escapeAttr(stage.id)}" ${lead.stage === stage.id ? "selected" : ""}>${escapeHtml(stage.label)}</option>`).join("")}
           </select>
+          <div class="pipeline-actions">
+            <button class="button tiny" type="button" data-pipeline-action="view" data-id="${escapeAttr(lead.id)}">Ver / editar</button>
+            <button class="button tiny" type="button" data-pipeline-action="activity" data-id="${escapeAttr(lead.id)}">+ Actividad</button>
+            ${lead.email ? `<a class="button tiny" target="_blank" rel="noopener" href="${escapeAttr(outlookComposeUrl(lead))}" data-action-link>Outlook</a>` : ""}
+            ${lead.phone ? `<a class="button tiny" target="_blank" rel="noopener" href="https://wa.me/${escapeAttr(cleanPhone(lead.phone))}" data-action-link>WhatsApp</a>` : ""}
+          </div>
         </div>
       `;
     }
@@ -1916,8 +2252,10 @@
 
     function updateDetailHeader(lead) {
       if (lead) {
+        const score = leadScore(lead);
+        const activityMeta = lastActivityMeta(lead);
         els.detailTitle.textContent = lead.company || "Ficha sin empresa";
-        els.detailSubtitle.textContent = `${findStage(lead.stage).label} · ${lead.platform || "Sin canal"}`;
+        els.detailSubtitle.textContent = `${findStage(lead.stage).label} · ${lead.platform || "Sin canal"} · Score ${score} (${leadScoreMeta(score).label}) · Última actividad: ${activityMeta.label}`;
       } else {
         els.detailTitle.textContent = "Nueva oportunidad";
         els.detailSubtitle.textContent = "Guarda una empresa para seguirla";
@@ -1935,7 +2273,7 @@
       const actionsHtml = [];
       const phone = cleanPhone(lead.phone);
       if (lead.phone) actionsHtml.push(`<a class="button" href="tel:${escapeAttr(phone)}">Llamar</a>`);
-      if (lead.email) actionsHtml.push(`<a class="button" href="mailto:${escapeAttr(lead.email)}">Email</a>`);
+      if (lead.email) actionsHtml.push(`<a class="button" target="_blank" rel="noopener" href="${escapeAttr(outlookComposeUrl(lead))}">Outlook</a>`);
       if (phone) actionsHtml.push(`<a class="button" target="_blank" rel="noopener" href="https://wa.me/${escapeAttr(phone)}">WhatsApp</a>`);
       if (lead.email) actionsHtml.push(`<button class="button" type="button" data-copy="${escapeAttr(lead.email)}">Copiar email</button>`);
       if (lead.phone) actionsHtml.push(`<button class="button" type="button" data-copy="${escapeAttr(lead.phone)}">Copiar teléfono</button>`);
@@ -1980,19 +2318,98 @@
         return;
       }
 
+      const updated = applyActivityToLead(lead.id, activity);
+      if (updated) fillForm(updated);
+      showToast("Actividad añadida.");
+    }
+
+    function openQuickActivityModal(id, defaults = {}) {
+      const lead = leads.find(item => item.id === id);
+      if (!lead) return;
+      quickActivityLeadId = id;
+      els.quickActivityTitle.textContent = `Actividad · ${lead.company || lead.contact || "Sin empresa"}`;
+      els.quickActivityDate.value = defaults.date || today();
+      els.quickActivityType.value = defaults.type || "Seguimiento";
+      els.quickActivityNote.value = defaults.note || "";
+      els.quickActivityNextDate.value = defaults.nextDate || "";
+      els.quickActivityNextAction.value = defaults.nextAction || "";
+      els.quickActivityModal.classList.add("active");
+      els.quickActivityModal.setAttribute("aria-hidden", "false");
+      els.quickActivityNote.focus();
+    }
+
+    function closeQuickActivityModal() {
+      quickActivityLeadId = null;
+      els.quickActivityModal.classList.remove("active");
+      els.quickActivityModal.setAttribute("aria-hidden", "true");
+    }
+
+    function saveQuickActivity() {
+      if (!quickActivityLeadId) return;
+      const activity = {
+        date: els.quickActivityDate.value || today(),
+        type: els.quickActivityType.value,
+        note: els.quickActivityNote.value.trim(),
+        nextDate: els.quickActivityNextDate.value,
+        nextAction: els.quickActivityNextAction.value
+      };
+      if (!activity.note && !activity.nextDate && !activity.nextAction) {
+        showToast("Añade una nota o una próxima acción.");
+        return;
+      }
+      const updated = applyActivityToLead(quickActivityLeadId, activity);
+      if (updated && selectedId === updated.id) fillForm(updated);
+      closeQuickActivityModal();
+      showToast("Actividad añadida.");
+    }
+
+    function applyActivityToLead(id, activity, options = {}) {
+      const lead = leads.find(item => item.id === id);
+      if (!lead) return null;
       const updated = {
         ...lead,
         activityLog: addActivityEntry(lead.activityLog || [], activity),
-        lastContactDate: activity.date
+        lastContactDate: activity.date || today()
       };
-      if (activity.nextDate) updated.nextDate = activity.nextDate;
-      if (activity.nextAction) updated.nextAction = activity.nextAction;
-
-      leads = leads.map(item => item.id === updated.id ? updated : item);
+      if (options.clearNext) {
+        updated.nextDate = "";
+        updated.nextAction = "";
+      } else {
+        if (activity.nextDate) updated.nextDate = activity.nextDate;
+        if (activity.nextAction) updated.nextAction = activity.nextAction;
+      }
+      leads = leads.map(item => item.id === id ? updated : item);
       saveLeads();
-      fillForm(updated);
       render();
-      showToast("Actividad añadida.");
+      return updated;
+    }
+
+    function handleTaskAction(action, id) {
+      const lead = leads.find(item => item.id === id);
+      if (!lead) return;
+      if (action === "activity") {
+        openQuickActivityModal(id);
+        return;
+      }
+      if (action === "done") {
+        const updated = applyActivityToLead(id, {
+          date: today(),
+          type: "Seguimiento realizado",
+          note: `${lead.nextAction || "Seguimiento"} realizado.`
+        }, { clearNext: true });
+        if (updated && selectedId === id) fillForm(updated);
+        showToast("Seguimiento marcado como realizado.");
+        return;
+      }
+      const days = action === "postpone7" ? 7 : 1;
+      const base = lead.nextDate || today();
+      const nextDate = shiftDateFrom(base, days);
+      const updated = { ...lead, nextDate };
+      leads = leads.map(item => item.id === id ? updated : item);
+      saveLeads();
+      if (selectedId === id) fillForm(updated);
+      render();
+      showToast(`Acción pospuesta ${days} ${days === 1 ? "día" : "días"}.`);
     }
 
     function updateLeadStage(id, stageId) {
@@ -2057,7 +2474,16 @@
         const activityText = (lead.activityLog || []).map(item => `${item.type} ${item.note}`).join(" ");
         const haystack = `${fields.map(field => lead[field]).join(" ")} ${activityText}`.toLowerCase();
         return haystack.includes(filters.search);
-      });
+      }).sort(sortLeads);
+    }
+
+    function sortLeads(a, b) {
+      if (filters.sort === "potential") return Number(b.potential || 0) - Number(a.potential || 0);
+      if (filters.sort === "nextDate") return sortableDate(a.nextDate, true).localeCompare(sortableDate(b.nextDate, true));
+      if (filters.sort === "lastActivity") return sortableDate(lastActivityDate(b), false).localeCompare(sortableDate(lastActivityDate(a), false));
+      if (filters.sort === "probability") return Number(b.closeProbability || 0) - Number(a.closeProbability || 0);
+      if (filters.sort === "priority") return priorityWeight(b.priority) - priorityWeight(a.priority);
+      return leadScore(b) - leadScore(a);
     }
 
     function matchesNextActionFilter(lead, filter) {
@@ -2092,7 +2518,8 @@
         customerType: "all",
         assignedSalesperson: "all",
         probability: "all",
-        nextActionState: "all"
+        nextActionState: "all",
+        sort: "score"
       };
     }
 
@@ -2102,6 +2529,7 @@
       els.salespersonFilter.value = filters.assignedSalesperson;
       els.probabilityFilter.value = filters.probability;
       els.nextActionFilter.value = filters.nextActionState;
+      els.sortControl.value = filters.sort;
     }
 
     function updateSalespersonFilter() {
@@ -2141,6 +2569,88 @@
         .map(activity => activity.date);
       const reference = dates[0] || lead.lastContactDate || lead.nextDate || "";
       return reference.startsWith(today().slice(0, 7));
+    }
+
+    function leadScore(lead) {
+      let score = 0;
+      const potential = Number(lead.potential || 0);
+      if (potential >= 3000) score += 25;
+      else if (potential >= 1200) score += 15;
+      if (Number(lead.closeProbability || 0) >= 75) score += 20;
+      else if (Number(lead.closeProbability || 0) >= 50) score += 10;
+      if (lead.nextAction || lead.nextDate) score += 15;
+      if (lead.phone) score += 10;
+      if (lead.email) score += 10;
+      if (isActivityRecent(lead)) score += 10;
+      if (["interesado", "propuesta", "seguimiento"].includes(lead.stage)) score += 10;
+      if (lead.nextDate && compareDates(lead.nextDate, today()) < 0) score -= 10;
+      if (!lastActivityDate(lead)) score -= 10;
+      return Math.max(0, Math.min(100, score));
+    }
+
+    function leadScoreMeta(score) {
+      if (score >= 70) return { label: "Alto", tone: "alto" };
+      if (score >= 40) return { label: "Medio", tone: "medio" };
+      return { label: "Bajo", tone: "bajo" };
+    }
+
+    function lastActivityDate(lead) {
+      const dates = (lead.activityLog || [])
+        .map(activity => normalizeDate(activity.date))
+        .filter(Boolean)
+        .sort((a, b) => b.localeCompare(a));
+      return dates[0] || normalizeDate(lead.lastContactDate);
+    }
+
+    function latestActivity(lead) {
+      return [...(lead.activityLog || [])].sort((a, b) => String(b.date).localeCompare(String(a.date)))[0] || null;
+    }
+
+    function lastActivityMeta(lead) {
+      const date = lastActivityDate(lead);
+      if (!date) return { date: "", label: "Sin actividad", temperature: "Sin actividad", tone: "neutral" };
+      const diff = dayDiff(date, today());
+      const label = relativeActivityLabel(diff);
+      if (diff <= 7) return { date, label, temperature: "Caliente", tone: "ok" };
+      if (diff <= 21) return { date, label, temperature: "Templado", tone: "warn" };
+      return { date, label, temperature: "Frío", tone: "danger" };
+    }
+
+    function relativeActivityLabel(diff) {
+      if (diff <= 0) return "Hoy";
+      if (diff === 1) return "Hace 1 día";
+      if (diff < 14) return `Hace ${diff} días`;
+      const weeks = Math.round(diff / 7);
+      return weeks === 1 ? "Hace 1 semana" : `Hace ${weeks} semanas`;
+    }
+
+    function isActivityRecent(lead) {
+      const date = lastActivityDate(lead);
+      return Boolean(date && dayDiff(date, today()) <= 7);
+    }
+
+    function isHotLead(lead) {
+      return leadScore(lead) >= 70
+        || (["interesado", "propuesta", "seguimiento"].includes(lead.stage)
+          && Number(lead.closeProbability || 0) >= 50
+          && Number(lead.potential || 0) >= 1200
+          && (isWithinWeek(lead) || isDueTodayOrEarlier(lead)));
+    }
+
+    function getHotLeads() {
+      return leads.filter(isHotLead).sort((a, b) => leadScore(b) - leadScore(a));
+    }
+
+    function priorityWeight(priority) {
+      if (priority === "alta") return 3;
+      if (priority === "media") return 2;
+      if (priority === "baja") return 1;
+      return 0;
+    }
+
+    function sortableDate(value, emptyLast) {
+      if (value) return value;
+      return emptyLast ? "9999-12-31" : "0000-00-00";
     }
 
     function getSelectedLead() {
@@ -2232,6 +2742,66 @@
       render();
       fillForm(blankLead());
       showToast("Todos los datos se han borrado.");
+    }
+
+    function loadDemoData() {
+      const choice = prompt("Esto añadirá clientes de ejemplo. ¿Quieres fusionarlos con tus datos actuales?\n\nEscribe: fusionar, reemplazar o cancelar.", "fusionar");
+      const normalized = normalizeHeader(choice);
+      if (!choice || normalized === "cancelar") return;
+      if (!["fusionar", "reemplazar"].includes(normalized)) {
+        showToast("Operación cancelada. Usa fusionar o reemplazar.");
+        return;
+      }
+      const demo = createDemoLeads();
+      leads = normalized === "reemplazar" ? demo : mergeLeads(leads, demo);
+      selectedId = leads[0]?.id || null;
+      saveLeads();
+      render();
+      fillForm(getSelectedLead() || blankLead());
+      showToast(normalized === "reemplazar" ? "Datos demo cargados reemplazando los actuales." : "Datos demo fusionados.");
+    }
+
+    function createDemoLeads() {
+      const base = [
+        ["Aula Norte Formación", "Laura Méndez", "aula-norte@example.com", "+34000000001", "Madrid", "Panel LED aula", "Amazon", "interesado", "alta", 5200, 75, "Enviar presupuesto", shiftDate(1), shiftDateFrom(today(), -2)],
+        ["Clima Sur Servicios", "Marcos Vidal", "clima-sur@example.com", "+34000000002", "Sevilla", "Tubos LED almacén", "PC Componentes", "propuesta", "alta", 8700, 100, "WhatsApp", today(), shiftDateFrom(today(), -1)],
+        ["Reformas Delta", "Irene Soler", "reformas-delta@example.com", "+34000000003", "Valencia", "Downlights obra", "LEEDS FRIO", "seguimiento", "media", 3100, 50, "Llamar", shiftDate(6), shiftDateFrom(today(), -9)],
+        ["Colegio Monte Claro", "Nuria Pastor", "monte-claro@example.com", "+34000000004", "Zaragoza", "Iluminación aulas", "Amazon", "contactado", "media", 4200, 50, "Enviar tarifa", shiftDateFrom(today(), -2), shiftDateFrom(today(), -23)],
+        ["Hostal Plaza Centro", "Álvaro Ruiz", "plaza-centro@example.com", "+34000000005", "Granada", "Bombillas LED hotel", "ManoMano", "nuevo", "baja", 1400, 25, "Llamar", "", ""],
+        ["Tecno Aula Online", "Sara Blanco", "tecno-aula@example.com", "+34000000006", "Barcelona", "Paneles estudio", "Web propia", "convertido", "media", 6500, 100, "Cerrar seguimiento", "", shiftDateFrom(today(), -4)],
+        ["Mayorista Prisma", "Diego Lamas", "prisma@example.com", "+34000000007", "A Coruña", "Tiras LED", "Referido", "seguimiento", "alta", 12000, 75, "Pedir datos fiscales", shiftDate(3), shiftDateFrom(today(), -6)],
+        ["Talleres Ronda", "Elena Mora", "ronda@example.com", "+34000000008", "Málaga", "Campanas industriales", "Marketplace otro", "no_interesa", "baja", 900, 0, "Cerrar seguimiento", "", shiftDateFrom(today(), -31)],
+        ["Administración Costa", "Pablo Serra", "costa-admin@example.com", "+34000000009", "Alicante", "Emergencias LED", "PC Componentes", "interesado", "alta", 7600, 75, "Enviar presupuesto", shiftDateFrom(today(), -1), shiftDateFrom(today(), -3)],
+        ["Retail Vega", "Marta Ríos", "retail-vega@example.com", "+34000000010", "Bilbao", "Carriles trifásicos", "LEEDS FRIO", "contactado", "media", 2800, 50, "Enviar email", shiftDate(10), shiftDateFrom(today(), -15)]
+      ];
+      return base.map(([company, contact, email, phone, province, interestProduct, platform, stage, priority, potential, closeProbability, nextAction, nextDate, lastContactDate], index) => normalizeLead({
+        id: `demo-${index + 1}`,
+        company,
+        contact,
+        email,
+        phone,
+        province,
+        city: province,
+        website: `${normalizeHeader(company).replace(/\s+/g, "-")}.example.com`,
+        customerType: index === 3 ? "Colegio / formación" : index === 7 ? "Administración pública" : "Empresa",
+        platform,
+        stage,
+        priority,
+        potential,
+        interestProduct,
+        products: interestProduct,
+        estimatedTicket: Math.round(Number(potential) / 4),
+        estimatedMargin: Math.round(Number(potential) * 0.18),
+        closeProbability,
+        nextAction,
+        nextDate,
+        lastContactDate,
+        assignedSalesperson: index % 2 ? "Carlos" : "Comercial demo",
+        notes: "Cliente ficticio para enseñar el CRM.",
+        activityLog: lastContactDate ? [
+          { id: `demo-${index + 1}-a1`, date: lastContactDate, type: "Seguimiento", note: "Contacto de demostración registrado.", nextDate, nextAction }
+        ] : []
+      }));
     }
 
     function importFile(event) {
@@ -2359,6 +2929,98 @@
         lines.push(exportColumns.map(column => csvCell(item[column.key] ?? "")).join(","));
       });
       return lines.join("\n");
+    }
+
+    function toFollowupCsv(items) {
+      const columns = [
+        ["company", "Empresa"],
+        ["contact", "Contacto"],
+        ["phone", "Teléfono"],
+        ["email", "Email"],
+        ["stage", "Estado"],
+        ["priority", "Prioridad"],
+        ["platform", "Canal"],
+        ["interestProduct", "Producto de interés"],
+        ["potential", "Potencial anual"],
+        ["estimatedTicket", "Ticket estimado"],
+        ["estimatedMargin", "Margen estimado"],
+        ["closeProbability", "Probabilidad"],
+        ["score", "Score"],
+        ["nextAction", "Próxima acción"],
+        ["nextDate", "Próxima fecha"],
+        ["lastActivity", "Última actividad"],
+        ["lastNote", "Última nota del historial"],
+        ["assignedSalesperson", "Comercial asignado"],
+        ["lossReason", "Motivo de pérdida"]
+      ];
+      const lines = [columns.map(([, label]) => csvCell(label)).join(",")];
+      items.forEach(lead => {
+        const latest = latestActivity(lead);
+        const row = columns.map(([key]) => {
+          if (key === "stage") return findStage(lead.stage).label;
+          if (key === "priority") return findPriority(lead.priority).label;
+          if (key === "score") return leadScore(lead);
+          if (key === "lastActivity") return lastActivityMeta(lead).label;
+          if (key === "lastNote") return latest?.note || "";
+          if (key === "nextDate") return formatDate(lead.nextDate);
+          return lead[key] ?? "";
+        });
+        lines.push(row.map(csvCell).join(","));
+      });
+      return lines.join("\n");
+    }
+
+    function printCommercialReport() {
+      const active = leads.filter(lead => !["convertido", "no_interesa"].includes(lead.stage));
+      const overdue = active.filter(lead => lead.nextDate && compareDates(lead.nextDate, today()) < 0);
+      const noNext = active.filter(lead => !lead.nextDate && !lead.nextAction);
+      const topPotential = [...leads].sort((a, b) => Number(b.potential || 0) - Number(a.potential || 0)).slice(0, 5);
+      const topScore = [...leads].sort((a, b) => leadScore(b) - leadScore(a)).slice(0, 5);
+      els.printReport.innerHTML = `
+        <h1>Directo CRM · Informe comercial</h1>
+        <p>Generado el ${escapeHtml(new Intl.DateTimeFormat("es-ES", { dateStyle: "short", timeStyle: "short" }).format(new Date()))}</p>
+        <h2>KPIs principales</h2>
+        <table>
+          <tbody>
+            <tr><td>Total clientes</td><td>${leads.length}</td><td>Valor potencial activo</td><td>${formatCurrency(active.reduce((sum, lead) => sum + Number(lead.potential || 0), 0))}</td></tr>
+            <tr><td>Atrasadas</td><td>${overdue.length}</td><td>Sin próxima acción</td><td>${noNext.length}</td></tr>
+            <tr><td>Convertidos</td><td>${leads.filter(lead => lead.stage === "convertido").length}</td><td>Perdidos</td><td>${leads.filter(lead => lead.stage === "no_interesa").length}</td></tr>
+          </tbody>
+        </table>
+        ${reportTable("Clientes calientes", getHotLeads().slice(0, 8))}
+        ${reportTable("Oportunidades atrasadas", overdue.slice(0, 8))}
+        ${reportTable("Top 5 por potencial", topPotential)}
+        ${reportTable("Top 5 por score", topScore)}
+        ${reportTable("Clientes sin próxima acción", noNext.slice(0, 8))}
+        <h2>Resumen por estado</h2>
+        <table>
+          <thead><tr><th>Estado</th><th>Clientes</th><th>Potencial</th></tr></thead>
+          <tbody>${stages.map(stage => {
+            const items = leads.filter(lead => lead.stage === stage.id);
+            const value = items.reduce((sum, lead) => sum + Number(lead.potential || 0), 0);
+            return `<tr><td>${escapeHtml(stage.label)}</td><td>${items.length}</td><td>${formatCurrency(value)}</td></tr>`;
+          }).join("")}</tbody>
+        </table>
+      `;
+      window.print();
+    }
+
+    function reportTable(title, items) {
+      return `
+        <h2>${escapeHtml(title)}</h2>
+        <table>
+          <thead><tr><th>Empresa</th><th>Estado</th><th>Score</th><th>Potencial</th><th>Próxima acción</th></tr></thead>
+          <tbody>${items.length ? items.map(lead => `
+            <tr>
+              <td>${escapeHtml(lead.company || lead.contact || "Sin empresa")}</td>
+              <td>${escapeHtml(findStage(lead.stage).label)}</td>
+              <td>${leadScore(lead)}</td>
+              <td>${formatCurrency(Number(lead.potential || 0))}</td>
+              <td>${escapeHtml(lead.nextAction || "-")} · ${formatDate(lead.nextDate)}</td>
+            </tr>
+          `).join("") : `<tr><td colspan="5">Sin datos</td></tr>`}</tbody>
+        </table>
+      `;
     }
 
     function toExcel(items) {
@@ -2497,6 +3159,20 @@
       return String(value || "").replace(/[^\d+]/g, "").replace(/^00/, "+");
     }
 
+    function outlookComposeUrl(lead) {
+      const subject = `Seguimiento Directo CRM - ${lead.company || lead.contact || "cliente"}`;
+      const body = [
+        lead.contact ? `Hola ${lead.contact},` : "Hola,",
+        "",
+        "Te escribo para dar seguimiento a tu interés y ver si podemos ayudarte directamente.",
+        lead.interestProduct ? `Producto de interés: ${lead.interestProduct}` : "",
+        lead.nextAction ? `Próxima acción prevista: ${lead.nextAction}` : "",
+        "",
+        "Un saludo,"
+      ].filter(line => line !== "").join("\n");
+      return `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(lead.email || "")}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
     async function copyText(value) {
       try {
         await navigator.clipboard.writeText(value);
@@ -2629,6 +3305,12 @@
 
     function shiftDate(days) {
       const date = new Date();
+      date.setDate(date.getDate() + days);
+      return toLocalDateString(date);
+    }
+
+    function shiftDateFrom(value, days) {
+      const date = value ? new Date(`${value}T00:00:00`) : new Date();
       date.setDate(date.getDate() + days);
       return toLocalDateString(date);
     }

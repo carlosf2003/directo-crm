@@ -33,6 +33,7 @@ Para mover datos o hacer copia de seguridad:
 - `JSON`: copia completa para importar de nuevo en el CRM.
 - `Excel`: exportación legible para trabajar en Excel.
 - `CSV`: exportación compatible con hojas de cálculo.
+- `Seguimiento`: CSV comercial con score, próxima acción, última actividad y última nota.
 - `Borrar datos`: elimina todos los clientes guardados en ese navegador.
 
 La `X` del listado solo limpia filtros; no borra clientes.
@@ -43,15 +44,22 @@ El importador acepta CSV separado por comas o por punto y coma, y salta filas va
 
 - Listado, agenda y pipeline Kanban.
 - Historial de actividad por cliente.
-- Acciones rápidas: llamar, email, WhatsApp, copiar datos y abrir web.
+- Actividad rápida desde listado, agenda y pipeline.
+- Score comercial, clientes calientes y última actividad.
+- Acciones rápidas: llamar, Outlook, WhatsApp, copiar datos y abrir web.
 - Campos comerciales ampliados: CIF, web, ciudad, provincia, tipo, ticket, margen, probabilidad, comercial y motivo de pérdida.
-- KPIs comerciales, valor ponderado, valor por estado y top clientes.
+- KPIs comerciales, valor ponderado, valor por estado, top clientes y top score.
 - Importación flexible de CSV de marketplaces.
+- Datos demo ficticios para enseñar el CRM.
+- Informe imprimible desde el navegador.
+
+Los botones de correo abren Outlook Web con destinatario, asunto y cuerpo preparados. La app no envía correos automáticamente porque sigue siendo 100% estática.
 
 ## Canales incluidos
 
 - Amazon
 - PC Componentes
+- LEEDS FRIO
 - ManoMano
 - Marketplace otro
 - Referido
