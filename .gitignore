@@ -1,2 +1,6 @@
 .DS_Store
 *.log
+.env
+.env.*
+supabase-config.local.js
+supabase-service-role*.js

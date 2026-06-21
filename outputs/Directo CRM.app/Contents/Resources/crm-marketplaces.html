@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Directo CRM</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2312795f'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial,sans-serif' font-size='34' font-weight='700' fill='white'%3ED%3C/text%3E%3C/svg%3E">
   <style>
     :root {
       color-scheme: light;
@@ -69,6 +70,102 @@
       min-height: 100vh;
       display: grid;
       grid-template-rows: auto auto 1fr;
+    }
+
+    .app.auth-blocked {
+      display: none;
+    }
+
+    .auth-screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: var(--bg);
+    }
+
+    .auth-card {
+      width: min(760px, 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .auth-header {
+      display: grid;
+      gap: 6px;
+    }
+
+    .auth-header h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    .auth-header p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .auth-tabs {
+      display: inline-flex;
+      width: max-content;
+      max-width: 100%;
+      gap: 4px;
+      padding: 4px;
+      border-radius: var(--radius);
+      background: #eef1ee;
+      overflow: auto;
+    }
+
+    .auth-tab {
+      min-height: 32px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .auth-tab.active {
+      background: var(--panel);
+      color: var(--accent-dark);
+      box-shadow: 0 3px 8px rgba(31, 43, 35, 0.08);
+    }
+
+    .auth-form {
+      display: none;
+      gap: 12px;
+    }
+
+    .auth-form.active {
+      display: grid;
+    }
+
+    .auth-status {
+      min-height: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .auth-status.error {
+      color: var(--danger);
+    }
+
+    .auth-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
     }
 
     .topbar {
@@ -159,6 +256,40 @@
       flex-wrap: wrap;
       justify-content: flex-end;
       gap: 8px;
+    }
+
+    .sync-pill,
+    .user-chip {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--muted);
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .sync-pill.ok {
+      border-color: #c8dfd0;
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .sync-pill.warn {
+      border-color: #ead0a5;
+      background: var(--warn-soft);
+      color: var(--warn);
+    }
+
+    .sync-pill.error {
+      border-color: #e0b8b8;
+      background: var(--danger-soft);
+      color: var(--danger);
     }
 
     .button {
@@ -263,6 +394,18 @@
       padding: 11px 13px;
       font-size: 13px;
       line-height: 1.45;
+    }
+
+    .notice.cloud {
+      border-color: #c8dfd0;
+      background: var(--ok-soft);
+      color: #245934;
+    }
+
+    .notice.error {
+      border-color: #e0b8b8;
+      background: var(--danger-soft);
+      color: var(--danger);
     }
 
     .dashboard {
@@ -1068,13 +1211,19 @@
       .modal-actions,
       .row-actions,
       .task-actions,
-      .pipeline-actions {
+      .pipeline-actions,
+      .auth-actions {
         align-items: stretch;
         flex-direction: column;
+      }
+
+      .auth-card {
+        padding: 16px;
       }
     }
 
     @media print {
+      body > .auth-screen,
       body > .app,
       body > .toast,
       body > .modal-backdrop {
@@ -1115,7 +1264,67 @@
   </style>
 </head>
 <body>
-  <div class="app">
+  <section class="auth-screen hidden" id="authScreen" aria-live="polite">
+    <div class="auth-card">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">D</div>
+        <div>
+          <h1>Directo CRM</h1>
+          <p>Acceso con Supabase</p>
+        </div>
+      </div>
+      <div class="auth-header">
+        <h1>Entra para sincronizar tus clientes</h1>
+        <p>Con Supabase activado, tus datos se guardan en tu cuenta y se mantienen separados por usuario. También puedes continuar en modo local si solo quieres guardar en este navegador.</p>
+      </div>
+      <div class="auth-status" id="authStatus">Comprobando configuración...</div>
+      <div class="auth-tabs" role="tablist" aria-label="Acceso">
+        <button class="auth-tab active" id="loginTab" type="button" data-auth-tab="login">Iniciar sesión</button>
+        <button class="auth-tab" id="registerTab" type="button" data-auth-tab="register">Registrarse</button>
+        <button class="auth-tab" id="recoverTab" type="button" data-auth-tab="recover">Recuperar</button>
+      </div>
+      <form class="auth-form active" id="loginForm">
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="loginPassword">Contraseña</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="auth-actions">
+          <button class="button primary" type="submit">Entrar</button>
+        </div>
+      </form>
+      <form class="auth-form" id="registerForm">
+        <div class="field">
+          <label for="registerEmail">Email</label>
+          <input id="registerEmail" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="registerPassword">Contraseña</label>
+          <input id="registerPassword" type="password" autocomplete="new-password" minlength="6" required>
+        </div>
+        <div class="auth-actions">
+          <button class="button primary" type="submit">Crear cuenta</button>
+        </div>
+      </form>
+      <form class="auth-form" id="recoverForm">
+        <div class="field">
+          <label for="recoverEmail">Email</label>
+          <input id="recoverEmail" type="email" autocomplete="email" required>
+        </div>
+        <div class="auth-actions">
+          <button class="button primary" type="submit">Enviar recuperación</button>
+        </div>
+      </form>
+      <div class="auth-actions">
+        <button class="button" id="localModeBtn" type="button">Continuar en modo local</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="app auth-blocked" id="appShell">
     <header class="topbar">
       <div class="brand">
         <div class="brand-mark" aria-hidden="true">D</div>
@@ -1131,6 +1340,9 @@
       </div>
 
       <div class="toolbar" aria-label="Acciones">
+        <span class="sync-pill warn" id="syncStatus">Cargando...</span>
+        <span class="user-chip hidden" id="userEmail"></span>
+        <button class="button" id="logoutBtn" type="button">Salir</button>
         <button class="button primary" id="newLeadBtn" type="button"><span aria-hidden="true">+</span> Nuevo cliente</button>
         <button class="button" id="demoDataBtn" type="button" title="Añadir clientes ficticios para enseñar el CRM"><span aria-hidden="true">★</span> Datos demo</button>
         <button class="button" id="exportJsonBtn" type="button" title="Copia de seguridad JSON"><span aria-hidden="true">⇩</span> Copia JSON</button>
@@ -1162,7 +1374,7 @@
       <div class="kpi"><span>Conversión</span><strong id="kpiConversion">0%</strong></div>
     </section>
 
-    <div class="notice">
+    <div class="notice" id="storageNotice">
       Los datos se guardan en este navegador. Haz copias de seguridad periódicas. Para uso con datos sensibles o varios usuarios, se recomienda una versión con login y base de datos.
     </div>
 
@@ -1477,9 +1689,15 @@
 
   <section class="print-report" id="printReport" aria-label="Informe imprimible"></section>
 
+  <script src="supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const STORAGE_KEY = "directo-crm-v3";
+    const CLOUD_CACHE_KEY = "directo-crm-v3-cloud-draft";
+    const MIGRATION_DISMISSED_KEY = "directo-crm-v3-migration-dismissed";
     const LEGACY_STORAGE_KEYS = ["directo-crm-v2", "directo-crm-v1"];
+    const SUPABASE_TABLE = "crm_leads";
+    const SUPABASE_CONFIG = window.DIRECTO_CRM_SUPABASE || {};
 
     const stages = [
       { id: "nuevo", label: "Nuevo", tone: "neutral" },
@@ -1558,8 +1776,34 @@
     let filters = defaultFilters();
     let activeView = "list";
     let quickActivityLeadId = null;
+    let supabaseClient = null;
+    let authSession = null;
+    let storageMode = "local";
+    let storageProvider = null;
+    let pendingSave = Promise.resolve();
+    let activatingCloud = false;
+    let activeSessionUserId = "";
 
     const els = {
+      appShell: document.getElementById("appShell"),
+      authScreen: document.getElementById("authScreen"),
+      authStatus: document.getElementById("authStatus"),
+      loginTab: document.getElementById("loginTab"),
+      registerTab: document.getElementById("registerTab"),
+      recoverTab: document.getElementById("recoverTab"),
+      loginForm: document.getElementById("loginForm"),
+      registerForm: document.getElementById("registerForm"),
+      recoverForm: document.getElementById("recoverForm"),
+      loginEmail: document.getElementById("loginEmail"),
+      loginPassword: document.getElementById("loginPassword"),
+      registerEmail: document.getElementById("registerEmail"),
+      registerPassword: document.getElementById("registerPassword"),
+      recoverEmail: document.getElementById("recoverEmail"),
+      localModeBtn: document.getElementById("localModeBtn"),
+      syncStatus: document.getElementById("syncStatus"),
+      userEmail: document.getElementById("userEmail"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      storageNotice: document.getElementById("storageNotice"),
       searchInput: document.getElementById("searchInput"),
       newLeadBtn: document.getElementById("newLeadBtn"),
       demoDataBtn: document.getElementById("demoDataBtn"),
@@ -1741,17 +1985,13 @@
       comercial: "assignedSalesperson"
     };
 
-    leads = loadLeads();
-    selectedId = leads[0]?.id || null;
-
     init();
 
     function init() {
       populateSelects();
       renderFilters();
       bindEvents();
-      render();
-      fillForm(getSelectedLead() || blankLead());
+      bootstrapStorage();
     }
 
     function populateSelects() {
@@ -1776,6 +2016,8 @@
     }
 
     function bindEvents() {
+      bindAuthEvents();
+
       els.searchInput.addEventListener("input", event => {
         filters.search = event.target.value.trim().toLowerCase();
         render();
@@ -1919,6 +2161,452 @@
         if (event.target === els.quickActivityModal) closeQuickActivityModal();
       });
       els.quickActivitySaveBtn.addEventListener("click", saveQuickActivity);
+    }
+
+    function bindAuthEvents() {
+      [els.loginTab, els.registerTab, els.recoverTab].forEach(tab => {
+        tab.addEventListener("click", () => switchAuthTab(tab.dataset.authTab));
+      });
+
+      els.loginForm.addEventListener("submit", handleLogin);
+      els.registerForm.addEventListener("submit", handleRegister);
+      els.recoverForm.addEventListener("submit", handleRecover);
+      els.localModeBtn.addEventListener("click", () => activateLocalMode("Modo local activo: los datos se guardan solo en este navegador. Configura Supabase para activar login y sincronización."));
+      els.logoutBtn.addEventListener("click", handleLogout);
+    }
+
+    function switchAuthTab(tabName) {
+      const tabs = {
+        login: els.loginTab,
+        register: els.registerTab,
+        recover: els.recoverTab
+      };
+      const forms = {
+        login: els.loginForm,
+        register: els.registerForm,
+        recover: els.recoverForm
+      };
+      Object.entries(tabs).forEach(([name, tab]) => tab.classList.toggle("active", name === tabName));
+      Object.entries(forms).forEach(([name, form]) => form.classList.toggle("active", name === tabName));
+      updateAuthStatus(tabName === "recover" ? "Indica tu email y te enviaremos un enlace de recuperación." : "Introduce tus datos para acceder a tu CRM.");
+      const firstInput = forms[tabName]?.querySelector("input");
+      if (firstInput) firstInput.focus();
+    }
+
+    async function bootstrapStorage() {
+      storageProvider = createLocalStorageProvider();
+      setSyncState("Cargando...", "warn");
+
+      if (!isSupabaseConfigured()) {
+        await activateLocalMode("Modo local activo: los datos se guardan solo en este navegador. Configura Supabase para activar login y sincronización.");
+        return;
+      }
+
+      if (!window.supabase || typeof window.supabase.createClient !== "function") {
+        showAuthScreen("Supabase está configurado, pero no se ha podido cargar la librería. Puedes continuar en modo local.");
+        setSyncState("Sin conexión", "error");
+        return;
+      }
+
+      const config = getSupabaseConfig();
+      supabaseClient = window.supabase.createClient(config.url, config.anonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      });
+
+      updateAuthStatus("Comprobando sesión...");
+      try {
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) throw error;
+        supabaseClient.auth.onAuthStateChange((_event, session) => {
+          handleAuthSession(session);
+        });
+        await handleAuthSession(data.session);
+      } catch (error) {
+        showAuthScreen(`No se pudo validar la sesión: ${error.message || "error desconocido"}.`);
+        setSyncState("Error de sesión", "error");
+      }
+    }
+
+    async function handleAuthSession(session) {
+      if (session?.user) {
+        await activateCloudMode(session);
+      } else {
+        authSession = null;
+        activeSessionUserId = "";
+        storageMode = "cloud";
+        storageProvider = createSupabaseStorageProvider();
+        els.userEmail.classList.add("hidden");
+        els.logoutBtn.classList.add("hidden");
+        showAuthScreen("Inicia sesión o crea una cuenta para activar sincronización. También puedes continuar en modo local.");
+        setSyncState("Sin sesión", "warn");
+      }
+    }
+
+    async function activateLocalMode(message) {
+      authSession = null;
+      storageMode = "local";
+      storageProvider = createLocalStorageProvider();
+      leads = await storageProvider.loadLeads();
+      selectedId = leads[0]?.id || null;
+      els.authScreen.classList.add("hidden");
+      els.appShell.classList.remove("auth-blocked");
+      els.userEmail.classList.add("hidden");
+      els.logoutBtn.classList.add("hidden");
+      updateStorageNotice("local", message);
+      setSyncState("Modo local", "warn");
+      render();
+      fillForm(getSelectedLead() || blankLead());
+    }
+
+    async function activateCloudMode(session) {
+      if (activatingCloud) return;
+      if (storageMode === "cloud" && activeSessionUserId === session.user.id && !els.appShell.classList.contains("auth-blocked")) return;
+      activatingCloud = true;
+      authSession = session;
+      activeSessionUserId = session.user.id;
+      storageMode = "cloud";
+      storageProvider = createSupabaseStorageProvider();
+      try {
+        els.authScreen.classList.add("hidden");
+        els.appShell.classList.remove("auth-blocked");
+        els.userEmail.textContent = session.user.email || "Usuario conectado";
+        els.userEmail.classList.remove("hidden");
+        els.logoutBtn.classList.remove("hidden");
+        updateStorageNotice("cloud");
+        setSyncState("Conectado", "ok");
+        leads = await storageProvider.loadLeads();
+        selectedId = leads[0]?.id || null;
+        render();
+        fillForm(getSelectedLead() || blankLead());
+        await maybeOfferLocalMigration();
+      } catch (error) {
+        const cached = loadCloudDraft();
+        leads = cached.length ? cached : loadLocalLeads();
+        selectedId = leads[0]?.id || null;
+        updateStorageNotice("error", "No se pudieron cargar los datos de Supabase. Se muestra una copia local temporal para evitar pérdida de trabajo.");
+        setSyncState("Error al cargar", "error");
+        render();
+        fillForm(getSelectedLead() || blankLead());
+        showToast(error.message || "No se pudo cargar Supabase.");
+      } finally {
+        activatingCloud = false;
+      }
+    }
+
+    function showAuthScreen(message, isError = false) {
+      els.authScreen.classList.remove("hidden");
+      els.appShell.classList.add("auth-blocked");
+      updateAuthStatus(message, isError);
+    }
+
+    function updateAuthStatus(message, isError = false) {
+      els.authStatus.textContent = message || "";
+      els.authStatus.classList.toggle("error", Boolean(isError));
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      if (!supabaseClient) return;
+      updateAuthStatus("Iniciando sesión...");
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: els.loginEmail.value.trim(),
+        password: els.loginPassword.value
+      });
+      if (error) {
+        updateAuthStatus(error.message, true);
+        return;
+      }
+      els.loginPassword.value = "";
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      if (!supabaseClient) return;
+      updateAuthStatus("Creando cuenta...");
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: els.registerEmail.value.trim(),
+        password: els.registerPassword.value
+      });
+      if (error) {
+        updateAuthStatus(error.message, true);
+        return;
+      }
+      els.registerPassword.value = "";
+      if (data.session) {
+        await activateCloudMode(data.session);
+      } else {
+        updateAuthStatus("Cuenta creada. Revisa tu email si Supabase pide confirmación antes de iniciar sesión.");
+        switchAuthTab("login");
+      }
+    }
+
+    async function handleRecover(event) {
+      event.preventDefault();
+      if (!supabaseClient) return;
+      updateAuthStatus("Enviando enlace de recuperación...");
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(els.recoverEmail.value.trim(), {
+        redirectTo: window.location.href.split("#")[0]
+      });
+      if (error) {
+        updateAuthStatus(error.message, true);
+        return;
+      }
+      updateAuthStatus("Si el email existe, recibirás un enlace para recuperar la contraseña.");
+    }
+
+    async function handleLogout() {
+      if (!supabaseClient) return;
+      setSyncState("Cerrando sesión...", "warn");
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        setSyncState("Error al salir", "error");
+        showToast(error.message || "No se pudo cerrar sesión.");
+      }
+    }
+
+    function isSupabaseConfigured() {
+      const config = getSupabaseConfig();
+      return /^https?:\/\//i.test(config.url)
+        && config.anonKey.length > 40
+        && !config.anonKey.includes("tu-anon-key")
+        && !config.anonKey.includes("example");
+    }
+
+    function getSupabaseConfig() {
+      return {
+        url: String(SUPABASE_CONFIG.url || SUPABASE_CONFIG.SUPABASE_URL || "").trim(),
+        anonKey: String(SUPABASE_CONFIG.anonKey || SUPABASE_CONFIG.SUPABASE_ANON_KEY || "").trim()
+      };
+    }
+
+    function updateStorageNotice(mode, customMessage = "") {
+      els.storageNotice.className = "notice";
+      if (mode === "cloud") {
+        els.storageNotice.classList.add("cloud");
+        els.storageNotice.textContent = `Conectado a Supabase como ${authSession?.user?.email || "usuario"}. Los datos se guardan en tu cuenta y la seguridad depende de las políticas RLS configuradas en Supabase.`;
+      } else if (mode === "error") {
+        els.storageNotice.classList.add("error");
+        els.storageNotice.textContent = customMessage;
+      } else {
+        els.storageNotice.textContent = customMessage || "Modo local activo: los datos se guardan solo en este navegador. Configura Supabase para activar login y sincronización.";
+      }
+    }
+
+    function setSyncState(label, tone = "warn") {
+      els.syncStatus.textContent = label;
+      els.syncStatus.className = `sync-pill ${tone}`;
+    }
+
+    async function maybeOfferLocalMigration() {
+      const localLeads = loadLocalLeads();
+      if (!localLeads.length || !authSession?.user) return;
+      if (localStorage.getItem(MIGRATION_DISMISSED_KEY) === authSession.user.id) return;
+
+      const choice = prompt(
+        "Se han encontrado datos locales en este navegador. ¿Quieres subirlos a tu cuenta?\n\nEscribe: fusionar, reemplazar, descargar o ignorar.\n\nfusionar: une local y nube evitando duplicados.\nreemplazar: la nube queda con los datos locales.\ndescargar: descarga un JSON de la nube y mantiene lo local como backup.\nignorar: pregunta más tarde.",
+        "fusionar"
+      );
+      const normalized = normalizeHeader(choice);
+      if (!choice || normalized === "ignorar" || normalized === "cancelar") {
+        localStorage.setItem(MIGRATION_DISMISSED_KEY, authSession.user.id);
+        return;
+      }
+      if (!["fusionar", "reemplazar", "descargar"].includes(normalized)) {
+        showToast("Migración cancelada. Usa fusionar, reemplazar, descargar o ignorar.");
+        return;
+      }
+
+      if (normalized === "descargar") {
+        downloadFile(`directo-crm-nube-${today()}.json`, JSON.stringify({ exportedAt: new Date().toISOString(), leads }, null, 2), "application/json");
+        localStorage.setItem(MIGRATION_DISMISSED_KEY, authSession.user.id);
+        showToast("Backup de la nube descargado. Los datos locales se mantienen.");
+        return;
+      }
+
+      if (confirm("Antes de migrar, ¿quieres descargar un backup JSON de tus datos locales?")) {
+        downloadFile(`directo-crm-local-backup-${today()}.json`, JSON.stringify({ exportedAt: new Date().toISOString(), leads: localLeads }, null, 2), "application/json");
+      }
+
+      leads = normalized === "reemplazar" ? localLeads : mergeLeads(leads, localLeads);
+      selectedId = leads[0]?.id || null;
+      await storageProvider.saveAllLeads(leads);
+      localStorage.setItem(MIGRATION_DISMISSED_KEY, authSession.user.id);
+      render();
+      fillForm(getSelectedLead() || blankLead());
+      showToast(normalized === "reemplazar" ? "Datos locales subidos reemplazando la nube." : "Datos locales fusionados con la nube.");
+    }
+
+    function createLocalStorageProvider() {
+      return {
+        name: "local",
+        async loadLeads() {
+          return loadLocalLeads();
+        },
+        async saveLead(lead) {
+          leads = mergeLeads(leads, [lead]);
+          saveLocalLeads(leads);
+        },
+        async updateLead(lead) {
+          leads = leads.map(item => item.id === lead.id ? lead : item);
+          saveLocalLeads(leads);
+        },
+        async deleteLead(id) {
+          leads = leads.filter(item => item.id !== id);
+          saveLocalLeads(leads);
+        },
+        async saveAllLeads(items) {
+          saveLocalLeads(items);
+          setSyncState("Modo local", "warn");
+        },
+        async clearAllLeads() {
+          clearLocalStorageData();
+          setSyncState("Modo local", "warn");
+        },
+        exportLeads() {
+          return leads;
+        }
+      };
+    }
+
+    function createSupabaseStorageProvider() {
+      return {
+        name: "supabase",
+        async loadLeads() {
+          if (!authSession?.user) return [];
+          setSyncState("Cargando nube...", "warn");
+          const { data, error } = await supabaseClient
+            .from(SUPABASE_TABLE)
+            .select("lead_key,data,updated_at")
+            .eq("user_id", authSession.user.id)
+            .order("updated_at", { ascending: false });
+          if (error) throw error;
+          const items = (data || []).map(row => normalizeLead({ ...(row.data || {}), id: row.data?.id || row.lead_key, updatedAt: row.data?.updatedAt || row.updated_at }));
+          localStorage.setItem(CLOUD_CACHE_KEY, JSON.stringify(items));
+          setSyncState("Guardado", "ok");
+          return items;
+        },
+        async saveLead(lead) {
+          await this.saveAllLeads(mergeLeads(leads, [lead]));
+        },
+        async updateLead(lead) {
+          await this.saveAllLeads(leads.map(item => item.id === lead.id ? lead : item));
+        },
+        async deleteLead(id) {
+          if (!authSession?.user) return;
+          setSyncState("Guardando...", "warn");
+          const { error } = await supabaseClient
+            .from(SUPABASE_TABLE)
+            .delete()
+            .eq("user_id", authSession.user.id)
+            .eq("lead_key", id);
+          if (error) throw error;
+          setSyncState("Guardado", "ok");
+        },
+        async saveAllLeads(items) {
+          if (!authSession?.user) return;
+          const normalized = items.map(lead => normalizeLead(lead));
+          setSyncState("Guardando...", "warn");
+          localStorage.setItem(CLOUD_CACHE_KEY, JSON.stringify(normalized));
+
+          const keys = normalized.map(lead => String(lead.id)).filter(Boolean);
+          if (normalized.length) {
+            const rows = normalized.map(lead => ({
+              user_id: authSession.user.id,
+              lead_key: String(lead.id),
+              data: lead
+            }));
+            const { error } = await supabaseClient
+              .from(SUPABASE_TABLE)
+              .upsert(rows, { onConflict: "user_id,lead_key" });
+            if (error) throw error;
+          }
+
+          const { data: currentRows, error: selectError } = await supabaseClient
+            .from(SUPABASE_TABLE)
+            .select("lead_key")
+            .eq("user_id", authSession.user.id);
+          if (selectError) throw selectError;
+
+          const staleKeys = (currentRows || [])
+            .map(row => row.lead_key)
+            .filter(key => !keys.includes(key));
+          if (staleKeys.length) {
+            const { error } = await supabaseClient
+              .from(SUPABASE_TABLE)
+              .delete()
+              .eq("user_id", authSession.user.id)
+              .in("lead_key", staleKeys);
+            if (error) throw error;
+          }
+
+          setSyncState("Guardado", "ok");
+        },
+        async clearAllLeads() {
+          if (!authSession?.user) return;
+          setSyncState("Guardando...", "warn");
+          const { error } = await supabaseClient
+            .from(SUPABASE_TABLE)
+            .delete()
+            .eq("user_id", authSession.user.id);
+          if (error) throw error;
+          localStorage.removeItem(CLOUD_CACHE_KEY);
+          setSyncState("Guardado", "ok");
+        },
+        exportLeads() {
+          return leads;
+        }
+      };
+    }
+
+    function saveLeads() {
+      const now = new Date().toISOString();
+      leads = leads.map(lead => normalizeLead({ ...lead, updatedAt: now }));
+      const snapshot = leads.map(lead => normalizeLead(lead));
+      pendingSave = pendingSave.catch(() => {}).then(async () => {
+        try {
+          await storageProvider.saveAllLeads(snapshot);
+        } catch (error) {
+          localStorage.setItem(storageMode === "cloud" ? CLOUD_CACHE_KEY : STORAGE_KEY, JSON.stringify(snapshot));
+          setSyncState("Error al guardar", "error");
+          updateStorageNotice("error", "No se pudo guardar en Supabase. Hay una copia temporal en este navegador; revisa conexión y configuración.");
+          showToast(error.message || "No se pudo guardar.");
+        }
+      });
+      return pendingSave;
+    }
+
+    function loadLocalLeads() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return migrateLegacyLeads();
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed) ? parsed.map(normalizeLead) : demoLeads;
+      } catch {
+        return migrateLegacyLeads();
+      }
+    }
+
+    function saveLocalLeads(items) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items.map(normalizeLead)));
+    }
+
+    function loadCloudDraft() {
+      try {
+        const saved = localStorage.getItem(CLOUD_CACHE_KEY);
+        const parsed = saved ? JSON.parse(saved) : [];
+        return Array.isArray(parsed) ? parsed.map(normalizeLead) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function clearLocalStorageData() {
+      localStorage.removeItem(STORAGE_KEY);
+      LEGACY_STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
     }
 
     function render() {
@@ -2687,19 +3375,9 @@
         lossReason: "",
         products: "",
         notes: "",
-        activityLog: []
+        activityLog: [],
+        updatedAt: ""
       };
-    }
-
-    function loadLeads() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (!saved) return migrateLegacyLeads();
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) ? parsed.map(normalizeLead) : demoLeads;
-      } catch {
-        return migrateLegacyLeads();
-      }
     }
 
     function migrateLegacyLeads() {
@@ -2719,23 +3397,30 @@
       return demoLeads;
     }
 
-    function saveLeads() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
-    }
-
-    function clearAllData() {
+    async function clearAllData() {
       if (!leads.length) {
         showToast("No hay clientes guardados para borrar.");
         return;
       }
 
-      const confirmed = confirm("Esto borrará todos los clientes guardados en este navegador. ¿Seguro que quieres continuar?");
-      if (!confirmed) return;
+      const message = storageMode === "cloud"
+        ? "Esto borrará todos los clientes de tu usuario en Supabase. No afectará a otros usuarios. Escribe BORRAR para confirmar."
+        : "Esto borrará todos los clientes guardados en este navegador. Escribe BORRAR para confirmar.";
+      const confirmed = prompt(message);
+      if (confirmed !== "BORRAR") {
+        showToast("Borrado cancelado.");
+        return;
+      }
 
       leads = [];
       selectedId = null;
-      localStorage.removeItem(STORAGE_KEY);
-      LEGACY_STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
+      try {
+        await storageProvider.clearAllLeads();
+      } catch (error) {
+        setSyncState("Error al borrar", "error");
+        showToast(error.message || "No se pudieron borrar los datos.");
+        return;
+      }
       filters = defaultFilters();
       els.searchInput.value = "";
       syncFilterControls();
@@ -2901,26 +3586,57 @@
       lead.lastContactDate = normalizeDate(lead.lastContactDate);
       lead.website = normalizeWebsite(lead.website);
       lead.activityLog = Array.isArray(raw.activityLog) ? raw.activityLog.map(normalizeActivity).filter(Boolean) : [];
+      lead.updatedAt = raw.updatedAt || raw.updated_at || "";
       return lead;
     }
 
     function mergeLeads(existing, imported) {
       const merged = [...existing];
       imported.forEach(lead => {
-        const index = merged.findIndex(item => mergeKey(item) === mergeKey(lead));
+        const normalized = normalizeLead(lead);
+        const index = findMergeIndex(merged, normalized);
         if (index >= 0) {
-          merged[index] = { ...merged[index], ...lead, id: merged[index].id, activityLog: [...(lead.activityLog || []), ...(merged[index].activityLog || [])] };
+          merged[index] = mergeLeadRecords(merged[index], normalized);
         } else {
-          merged.push(lead);
+          merged.push(normalized);
         }
       });
       return merged;
     }
 
-    function mergeKey(lead) {
-      if (lead.email) return `email:${normalizeHeader(lead.email)}`;
-      if (lead.company || lead.phone) return `lead:${normalizeHeader(lead.company)}:${cleanPhone(lead.phone)}`;
-      return `id:${lead.id}`;
+    function findMergeIndex(items, lead) {
+      return items.findIndex(item => {
+        if (item.id && lead.id && item.id === lead.id) return true;
+        if (item.email && lead.email && normalizeHeader(item.email) === normalizeHeader(lead.email)) return true;
+        if (item.orderRef && lead.orderRef && normalizeHeader(item.orderRef) === normalizeHeader(lead.orderRef) && normalizeHeader(item.platform) === normalizeHeader(lead.platform)) return true;
+        return Boolean((item.company || item.phone) && (lead.company || lead.phone)
+          && normalizeHeader(item.company) === normalizeHeader(lead.company)
+          && cleanPhone(item.phone) === cleanPhone(lead.phone));
+      });
+    }
+
+    function mergeLeadRecords(current, incoming) {
+      const currentTime = Date.parse(current.updatedAt || "") || 0;
+      const incomingTime = Date.parse(incoming.updatedAt || "") || 0;
+      const base = incomingTime > currentTime ? incoming : current;
+      const extra = incomingTime > currentTime ? current : incoming;
+      return {
+        ...extra,
+        ...base,
+        id: current.id || incoming.id,
+        activityLog: mergeActivities(current.activityLog || [], incoming.activityLog || []),
+        updatedAt: base.updatedAt || extra.updatedAt || new Date().toISOString()
+      };
+    }
+
+    function mergeActivities(first, second) {
+      const seen = new Set();
+      return [...first, ...second].filter(activity => {
+        const key = activity.id || `${activity.date}-${activity.type}-${activity.note}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
     }
 
     function toCsv(items) {
